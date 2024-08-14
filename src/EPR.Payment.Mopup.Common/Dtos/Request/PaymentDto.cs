@@ -1,6 +1,6 @@
 ﻿namespace EPR.Payment.Mopup.Common.Dtos.Request
 {
-    public class Payment
+    public class PaymentDto
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }

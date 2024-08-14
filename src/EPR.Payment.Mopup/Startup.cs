@@ -14,7 +14,7 @@ namespace EPR.Payment.Mopup
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables().
                 Build();
-            builder.Services.AddDependencies(config);
+            builder.Services.AddDataContext(config, config["SqlConnectionString"]);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿
-using EPR.Payment.Mopup.Common.Dtos.Response.Common;
+﻿using EPR.Payment.Mopup.Common.Dtos.Response.Common;
 using Newtonsoft.Json;
 
 namespace EPR.Payment.Mopup.Common.Dtos.Response

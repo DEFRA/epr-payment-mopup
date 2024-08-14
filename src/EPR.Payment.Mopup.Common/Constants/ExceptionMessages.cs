@@ -15,5 +15,10 @@
         public const string SuccessStatusWithErrorCode = "Error code should be null or empty for a success status.";
         public const string FailedStatusWithoutErrorCode = "Error code cannot be null or empty for a failed status.";
         public const string ErrorStatusWithoutErrorCode = "Error code cannot be null or empty for an error status.";
+
+
+
+        public const string InvalidInputToUpdatePaymentError = "The payment that is being tried to be updated is invalid.";
+        public const string RecordNotFoundPaymentError = "Payment record not found for ID";
     }
 }
