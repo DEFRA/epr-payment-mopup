@@ -42,7 +42,7 @@ namespace EPR.Payment.Mopup.Services
             {
                 if (string.IsNullOrEmpty(paymentDto.GovpayPaymentId))
                 {
-                    throw new ServiceException(ExceptionMessages.PaymentStatusNotFound);
+                    throw new ServiceException(ExceptionMessages.PaymentIdNotFound);
                 }
                 var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovpayPaymentId, cancellationToken);
                 var status = PaymentStatusMapper.GetPaymentStatus(

@@ -1,17 +1,22 @@
 ﻿using EPR.Payment.Mopup.Extension;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
 namespace EPR.Payment.Mopup
 {
+    [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"local.settings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"{environment}.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables().
                 Build();
             builder.Services.AddDataContext(config, config["SqlConnectionString"]);

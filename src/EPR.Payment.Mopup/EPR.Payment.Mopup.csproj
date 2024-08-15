@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EPR.Payment.Mopup.Common.Data\EPR.Payment.Mopup.Common.Data.csproj" />
+    <ProjectReference Include="..\EPR.Payment.Mopup.Common.UnitTests\EPR.Payment.Mopup.Common.UnitTests.csproj" />
     <ProjectReference Include="..\EPR.Payment.Mopup.Common\EPR.Payment.Mopup.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
