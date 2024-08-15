@@ -30,15 +30,15 @@ variables:
   - name: solutionFolder
     value: src
   - name: projectFolder
-    value: EPR.Payment.Service
+    value: EPR.Payment.Mopup
   - name: testProjectFolder
     value: 'EPR.Payment.Service.UnitTests'
   - name: DataFolder
     value: 'EPR.Payment.Service.Common.Data'
   - name: sonarQubeProjectKey
-    value: epr-payment-service
+    value: epr-payment-mopup
   - name: sonarQubeProjectName
-    value: epr-payment-service
+    value: epr-payment-mopup
   - name: runNugetTasks
     value: false
   - name: dotnetVersion
