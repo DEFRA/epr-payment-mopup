@@ -35,9 +35,9 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
         public async Task<List<DataModels.Payment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
         {
             DateTime now = DateTime.Now;
-            DateTime totalHoursToUpdate = now.AddHours(-Convert.ToInt32(_configuration["TotalHoursToUpdate"]));
-            DateTime ignoringHoursToUpdate = now.AddHours(-Convert.ToInt32(_configuration["IgnoringHoursToUpdate"]));
-            var entities = await _dataContext.Payment.Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= totalHoursToUpdate && a.CreatedDate <= ignoringHoursToUpdate).ToListAsync();
+            DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
+            DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
+            var entities = await _dataContext.Payment.Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom).ToListAsync();
             return entities;
         }
     }

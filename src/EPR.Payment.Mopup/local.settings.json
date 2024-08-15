@@ -6,8 +6,8 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "FUNCTIONS_TIME_TRIGGER": "0 */90 * * * *",
     "SqlConnectionString": "Data Source=.;Initial Catalog=FeesPayment;Trusted_Connection=true;TrustServerCertificate=true;",
-    "TotalHoursToUpdate": "24",
-    "IgnoringHoursToUpdate": "3"
+    "TotalMinutesToUpdate": "270",
+    "IgnoringMinutesToUpdate": "180"
   },
   "Services": {
     "GovPayService": {
