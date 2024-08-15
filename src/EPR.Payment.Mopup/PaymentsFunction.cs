@@ -26,6 +26,7 @@ namespace EPR.Payment.Mopup
         {
             try
             {
+                _logger.LogInformation("Mop Up time trigger function executed");
                 await _paymentsService.UpdatePaymentsAsync(cancellationToken);
             }
             catch (Exception ex)
