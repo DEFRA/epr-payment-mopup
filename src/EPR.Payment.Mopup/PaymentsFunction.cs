@@ -1,13 +1,11 @@
 using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Services.Interfaces;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-[assembly: FunctionsStartup(typeof(EPR.Payment.Mopup.Startup))]
 namespace EPR.Payment.Mopup
 {
     public class PaymentsFunction

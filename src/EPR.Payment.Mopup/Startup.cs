@@ -1,10 +1,13 @@
-﻿using EPR.Payment.Mopup.Extension;
+﻿using EPR.Payment.Mopup;
+using EPR.Payment.Mopup.Extension;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
+
+[assembly: FunctionsStartup(typeof(Startup))]
 namespace EPR.Payment.Mopup
 {
     [ExcludeFromCodeCoverage]
