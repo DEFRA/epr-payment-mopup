@@ -3,10 +3,7 @@
     "EPR.Payment.Mopup": {
       "commandName": "Project",
       "commandLineArgs": "--port 7258",
-      "launchBrowser": false,
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "launchBrowser": false
     }
   }
 }

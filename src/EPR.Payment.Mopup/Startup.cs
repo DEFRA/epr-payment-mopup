@@ -15,13 +15,13 @@ namespace EPR.Payment.Mopup
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile($"local.settings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"{environment}.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables().
-                Build();
+                .AddJsonFile($"local.settings.{environment}.json", optional: true, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
             builder.Services.AddDataContext(config, config["SqlConnectionString"]);
         }
     }
