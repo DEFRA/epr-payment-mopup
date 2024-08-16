@@ -11,6 +11,7 @@ using EPR.Payment.Mopup.Services.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,7 +51,7 @@ namespace EPR.Payment.Mopup.Services
                             paymentStatusResponse.State?.Code
                             );
                 var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
-                var entity = _mapper.Map<Common.Data.DataModels.Payment>(updateRequest);
+                var entity = _mapper.Map(updateRequest, payments.SingleOrDefault(x => x.Id == paymentDto.Id)); 
                 await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
             }
         }
@@ -73,15 +74,14 @@ namespace EPR.Payment.Mopup.Services
             }
         }
 
-        private PaymentDto CreateUpdatePaymentRequest(PaymentDto payment, PaymentStatusResponseDto paymentStatusResponse, Status status)
+        private UpdatePaymentRequestDto CreateUpdatePaymentRequest(PaymentDto paymentDto, PaymentStatusResponseDto paymentStatusResponse, Status status)
         {
-            payment.InternalStatusId = status;
-            payment.ErrorCode = paymentStatusResponse!.State!.Code;
-            payment.ErrorMessage = paymentStatusResponse!.State!.Message;
-            payment.GovPayStatus = paymentStatusResponse!.State!.Status;
-            payment.UpdatedDate = DateTime.Now;
+            var updatePayment = _mapper.Map<UpdatePaymentRequestDto>(paymentDto);
+            updatePayment.Status = status;
+            updatePayment.ErrorCode = paymentStatusResponse!.State!.Code;
+            updatePayment.ErrorMessage = paymentStatusResponse!.State!.Message;
 
-            return payment;
+            return updatePayment;
         }
     }
 }
