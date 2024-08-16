@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EPR.Payment.Mopup.Common.Data.UnitTests\EPR.Payment.Mopup.Common.Data.UnitTests.csproj" />
     <ProjectReference Include="..\EPR.Payment.Mopup\EPR.Payment.Mopup.csproj" />
   </ItemGroup>
 
