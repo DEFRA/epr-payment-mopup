@@ -7,7 +7,11 @@ namespace EPR.Payment.Mopup.Common.Data.Profiles
     {
         public PaymentProfile()
         {
-            CreateMap<PaymentDto, DataModels.Payment>().ReverseMap();
+            CreateMap<DataModels.Payment, PaymentDto>().ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.InternalStatusId));
+
+            CreateMap<UpdatePaymentRequestDto, DataModels.Payment>().ForMember(dest => dest.InternalStatusId, opt => opt.MapFrom(src => src.Status));
+
+            CreateMap<UpdatePaymentRequestDto, PaymentDto>().ReverseMap();
         }
     }
 }
