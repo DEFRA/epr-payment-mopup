@@ -19,7 +19,7 @@ namespace EPR.Payment.Mopup
             _logger = logger;
         }
 
-        [FunctionName("PaymentsFunction")]
+        [FunctionName("MopUpPaymentsFunction")]
         public async Task Run([TimerTrigger("%FUNCTIONS_TIME_TRIGGER%")] TimerInfo myTimer, CancellationToken cancellationToken)
         {
             try
