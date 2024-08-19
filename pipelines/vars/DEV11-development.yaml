@@ -1,9 +1,9 @@
 variables:
   azureSubscription: 'AZD-RWD-DEV11'
-  docker.imageName: 'eprpaymentbackend'
+  docker.imageName: 'eprpaymentmopup'
   acr.azureContainerRegistryName: 'devrwdinfac1401'
-  acr.repositoryName: 'eprpaymentbackendrepository'
-  serviceName: 'devrwdwebwab425'
+  acr.repositoryName: 'eprpaymentmopuprepository'
+  serviceName: 'DEVRWDWEBFAB409'
   kvName: DEVRWDINFKV1401
   sqlDBserver: 'devrwddbssq1401.database.windows.net'
   sqlDB: 'Feespayment'
