@@ -1,9 +1,14 @@
 ﻿using EPR.Payment.Mopup.Common.Configuration;
+using EPR.Payment.Mopup.Common.Data;
+using EPR.Payment.Mopup.Common.Data.Interfaces;
+using EPR.Payment.Mopup.Common.Data.Interfaces.Repositories;
+using EPR.Payment.Mopup.Common.Data.Repositories;
 using EPR.Payment.Mopup.Common.RESTServices;
 using EPR.Payment.Mopup.Common.RESTServices.Interfaces;
 using EPR.Payment.Mopup.Services;
 using EPR.Payment.Mopup.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,17 +24,18 @@ namespace EPR.Payment.Mopup.Extension
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IPaymentsRepository, PaymentsRepository>();
             services.Configure<ServicesConfiguration>(configuration.GetSection(ServicesConfiguration.SectionName));
             RegisterHttpService<IHttpGovPayService, HttpGovPayService>(
                 services, nameof(ServicesConfiguration.GovPayService));
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IPaymentsService, PaymentsService>();
             return services;
 
         }
 
         private static void RegisterHttpService<TInterface, TImplementation>(
-            IServiceCollection services, string configName, string? endPointOverride = null)
+            IServiceCollection services, string configName, string endPointOverride = null)
             where TInterface : class
             where TImplementation : class, TInterface
         {
@@ -52,12 +58,12 @@ namespace EPR.Payment.Mopup.Extension
                     : (TInterface)(TImplementation)instance;
             });
         }
-        private static IOptions<Service> CreateServiceOptions(IServiceCollection services, string configName, string? endPointOverride)
+        private static IOptions<Service> CreateServiceOptions(IServiceCollection services, string configName, string endPointOverride)
         {
             var serviceProvider = services.BuildServiceProvider();
             var servicesConfig = serviceProvider.GetRequiredService<IOptions<ServicesConfiguration>>().Value;
 
-            var serviceConfig = (Service?)servicesConfig.GetType().GetProperty(configName)?.GetValue(servicesConfig);
+            var serviceConfig = (Service)servicesConfig.GetType().GetProperty(configName)?.GetValue(servicesConfig);
 
             ValidateServiceConfiguration(serviceConfig, configName);
 
@@ -72,7 +78,7 @@ namespace EPR.Payment.Mopup.Extension
             });
         }
 
-        private static void ValidateServiceConfiguration(Service? serviceConfig, string configName)
+        private static void ValidateServiceConfiguration(Service serviceConfig, string configName)
         {
             if (serviceConfig?.Url == null)
             {
@@ -83,6 +89,19 @@ namespace EPR.Payment.Mopup.Extension
             {
                 throw new InvalidOperationException($"{configName} EndPointName configuration is missing.");
             }
+        }
+
+        public static IServiceCollection AddDataContext(this IServiceCollection services, IConfiguration configuration, string connectionString)
+        {
+            services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString, o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds));
+                options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+            });
+
+            services.AddScoped<IAppDbContext, AppDbContext>(provider => provider.GetService<AppDbContext>()!);
+            AddDependencies(services, configuration);
+            return services;
         }
     }
 }

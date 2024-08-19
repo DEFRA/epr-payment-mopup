@@ -2,6 +2,6 @@
 {
     public static class LogMessages
     {
-        public const string ErrorOccured = "An error occurred";
+        public const string ErrorOccured = "An error occurred while updating the payments";
     }
 }

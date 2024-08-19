@@ -1,6 +1,7 @@
 ﻿using EPR.Payment.Mopup.Common.Configuration;
 using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Common.Dtos.Response;
+using EPR.Payment.Mopup.Common.Exceptions;
 using EPR.Payment.Mopup.Common.RESTServices.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -41,7 +42,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             }
             catch (Exception ex)
             {
-                throw new Exception(ExceptionMessages.ErrorRetrievingPaymentStatus, ex);
+                throw new ServiceException(ExceptionMessages.ErrorRetrievingPaymentStatus, ex);
             }
         }
     }
