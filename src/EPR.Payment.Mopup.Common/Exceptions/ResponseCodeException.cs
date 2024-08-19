@@ -12,10 +12,5 @@ namespace EPR.Payment.Mopup.Common.Exceptions
         {
             StatusCode = statusCode;
         }
-
-        public ResponseCodeException(HttpStatusCode statusCode)
-        {
-            StatusCode = statusCode;
-        }
     }
 }
