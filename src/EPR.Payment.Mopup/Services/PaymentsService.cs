@@ -51,8 +51,12 @@ namespace EPR.Payment.Mopup.Services
                             paymentStatusResponse.State?.Code
                             );
                 var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
-                var entity = _mapper.Map(updateRequest, payments.SingleOrDefault(x => x.Id == paymentDto.Id)); 
-                await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
+                var entity = payments.SingleOrDefault(x => x.Id == paymentDto.Id);
+                if(entity != null) 
+                {
+                    _mapper.Map(updateRequest, entity);
+                    await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
+                }
             }
         }
 
