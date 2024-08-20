@@ -20,11 +20,13 @@ ENV PATH="${PATH}:/root/.dotnet/tools"
 WORKDIR /src
 COPY ["EPR.Payment.Mopup/EPR.Payment.Mopup.csproj", "EPR.Payment.Mopup/"]
 COPY ["EPR.Payment.Mopup.Common.Data/EPR.Payment.Mopup.Common.Data.csproj", "EEPR.Payment.Mopup.Common.Data/"]
+COPY ["EPR.Payment.Mopup.Common/EPR.Payment.Mopup.Common.csproj", "EPR.Payment.Mopup.Common/"]
 
 RUN dotnet restore "./EPR.Payment.Mopup/EPR.Payment.Mopup.csproj"
 
 COPY --chown=dotnet:dotnet EPR.Payment.Mopup/. ./EPR.Payment.Mopup/.
 COPY --chown=dotnet:dotnet EPR.Payment.Mopup.Common.Data/. ./EPR.Payment.Mopup.Common.Data/.
+COPY --chown=dotnet:dotnet EPR.Payment.Mopup.Common/. ./EPR.Payment.Mopup.Common/.
 
 WORKDIR "/src/EPR.Payment.Mopup"
 RUN dotnet build "./EPR.Payment.Mopup.csproj" -c Release /p:AzureBuild=true -o /app/build
