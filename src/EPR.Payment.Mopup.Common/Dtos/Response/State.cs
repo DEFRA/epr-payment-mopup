@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace EPR.Payment.Mopup.Common.Dtos.Response.Common
+namespace EPR.Payment.Mopup.Common.Dtos.Response
 {
     public class State
     {

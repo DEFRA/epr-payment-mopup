@@ -13,7 +13,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
         protected readonly HttpClient _httpClient;
         protected IHttpContextAccessor _httpContextAccessor;
 
-        public BaseHttpService(
+        protected BaseHttpService(
             IHttpContextAccessor httpContextAccessor,
             IHttpClientFactory httpClientFactory,
             string baseUrl,
@@ -192,7 +192,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
                 _httpContextAccessor.HttpContext.Response.StatusCode = (int)response.StatusCode;
                 // for now we don't know how we're going to handle errors specifically,
                 // so we'll just throw an error with the error code
-                throw new Exception($"Error occurred calling API with error code: {response.StatusCode}. Message: {response.ReasonPhrase}");
+                throw new ServiceException($"Error occurred calling API with error code: {response.StatusCode}. Message: {response.ReasonPhrase}");
             }
         }
 

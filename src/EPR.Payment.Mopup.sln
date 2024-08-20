@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup", "EPR.Payment.Mopup\EPR.Payment.Mopup.csproj", "{528DF5F9-DC22-40D9-AFF0-54CFA674A7C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup", "EPR.Payment.Mopup\EPR.Payment.Mopup.csproj", "{528DF5F9-DC22-40D9-AFF0-54CFA674A7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Common", "EPR.Payment.Mopup.Common\EPR.Payment.Mopup.Common.csproj", "{C7EA57CD-BF62-498A-8869-833D32FE8286}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Common", "EPR.Payment.Mopup.Common\EPR.Payment.Mopup.Common.csproj", "{C7EA57CD-BF62-498A-8869-833D32FE8286}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Common.Data", "EPR.Payment.Mopup.Common.Data\EPR.Payment.Mopup.Common.Data.csproj", "{E02C92FE-5ACC-427A-A5DF-4C767475CE7E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5A6A7B15-CD16-48AE-A480-DA3DDB771BB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.UnitTests", "EPR.Payment.Mopup.UnitTests\EPR.Payment.Mopup.UnitTests.csproj", "{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Common.UnitTests", "EPR.Payment.Mopup.Common.UnitTests\EPR.Payment.Mopup.Common.UnitTests.csproj", "{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Common.Data.UnitTests", "EPR.Payment.Mopup.Common.Data.UnitTests\EPR.Payment.Mopup.Common.Data.UnitTests.csproj", "{57A94D85-FA59-41AB-884E-69686C3703E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +31,30 @@ Global
 		{C7EA57CD-BF62-498A-8869-833D32FE8286}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7EA57CD-BF62-498A-8869-833D32FE8286}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7EA57CD-BF62-498A-8869-833D32FE8286}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E02C92FE-5ACC-427A-A5DF-4C767475CE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E02C92FE-5ACC-427A-A5DF-4C767475CE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E02C92FE-5ACC-427A-A5DF-4C767475CE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E02C92FE-5ACC-427A-A5DF-4C767475CE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57A94D85-FA59-41AB-884E-69686C3703E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57A94D85-FA59-41AB-884E-69686C3703E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57A94D85-FA59-41AB-884E-69686C3703E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57A94D85-FA59-41AB-884E-69686C3703E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3} = {5A6A7B15-CD16-48AE-A480-DA3DDB771BB8}
+		{1F20CBF0-2FB9-4017-8264-AF43DF1EB067} = {5A6A7B15-CD16-48AE-A480-DA3DDB771BB8}
+		{57A94D85-FA59-41AB-884E-69686C3703E6} = {5A6A7B15-CD16-48AE-A480-DA3DDB771BB8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {10A2B441-78DE-412A-BCAE-6C69C7A61339}
