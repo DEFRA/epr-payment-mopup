@@ -67,7 +67,6 @@ extends:
     acrRepositoryName: $(acr.repositoryName)
     branchName: ${{ replace(replace(variables['Build.SourceBranch'], 'refs/heads/', ''), '/', '_') }}
     runNugetTasks: ${{ variables.runNugetTasks }}
-    buildMigrationScript: true
     serviceName: $(serviceName)
     sonarqubeInstance: ${{ parameters.sonarqubeInstance }}
     dotnetVersion: ${{ variables.dotnetVersion }}
