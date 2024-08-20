@@ -30,10 +30,6 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             {
                 SetBearerToken(_bearerToken); // Set the bearer token
             }
-            else
-            {
-                throw new InvalidOperationException(ExceptionMessages.BearerTokenNull);
-            }
 
             var url = UrlConstants.GovPayGetPaymentStatus.Replace("{paymentId}", paymentId);
             try

@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EPR.Payment.Mopup.Common.Constants;
+﻿using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Common.Data.Interfaces;
 using EPR.Payment.Mopup.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Mopup.Common.Enums;

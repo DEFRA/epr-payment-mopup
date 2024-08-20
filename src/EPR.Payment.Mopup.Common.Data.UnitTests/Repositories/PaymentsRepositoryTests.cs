@@ -1,5 +1,4 @@
 ﻿using AutoFixture.MSTest;
-using Azure.Core;
 using EPR.Payment.Mopup.Common.Data.Interfaces;
 using EPR.Payment.Mopup.Common.Data.Repositories;
 using EPR.Payment.Mopup.Common.Enums;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Data.Entity;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
 {
