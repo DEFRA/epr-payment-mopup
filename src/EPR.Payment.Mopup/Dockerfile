@@ -1,32 +1,42 @@
-# Use the SDK image to build your application
-# FROM defradigital/dotnetcore-development:dotnet8.0 AS installer-env
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS installer-env
+FROM defradigital/dotnetcore-development:dotnet8.0 AS base
+ 
+USER root
+ARG PORT=8080
+ENV ASPNETCORE_URLS=http://*:${PORT}
+EXPOSE ${PORT}
+ 
+RUN apk update && apk --no-cache add icu-libs
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+ 
+FROM defradigital/dotnetcore-development:dotnet8.0 AS build
+USER root
+ 
+# Install dotnet-ef tool
+RUN dotnet tool install dotnet-ef --version 8.* --tool-path "/root/.dotnet/tools"
+ 
+# Add the tools folder to PATH
+ENV PATH="${PATH}:/root/.dotnet/tools"
+ 
+WORKDIR /src
+COPY ["EPR.Payment.Mopup/EPR.Payment.Mopup.csproj", "EPR.Payment.Mopup/"]
+COPY ["EPR.Payment.Mopup.Common.Data/EPR.Payment.Mopup.Common.Data.csproj", "EEPR.Payment.Mopup.Common.Data/"]
+COPY ["EPR.Payment.Mopup.Common/EPR.Payment.Mopup.Common.csproj", "EPR.Payment.Mopup.Common/"]
 
-# Copy your application source code
-COPY EPR.Payment.Mopup/. ./EPR.Payment.Mopup/.
-COPY EPR.Payment.Mopup.Common/. ./EPR.Payment.Mopup.Common/.
-COPY EPR.Payment.Mopup.Common.Data/. ./EPR.Payment.Mopup.Common.Data/.
-COPY stylecop.ruleset ./
-COPY Directory.Build.props ./
+RUN dotnet restore "./EPR.Payment.Mopup/EPR.Payment.Mopup.csproj"
 
-# Build the application
-RUN dotnet publish EPR.Payment.Mopup/*.csproj --output /home/site/wwwroot
+COPY --chown=dotnet:dotnet EPR.Payment.Mopup/. ./EPR.Payment.Mopup/.
+COPY --chown=dotnet:dotnet EPR.Payment.Mopup.Common.Data/. ./EPR.Payment.Mopup.Common.Data/.
+COPY --chown=dotnet:dotnet EPR.Payment.Mopup.Common/. ./EPR.Payment.Mopup.Common/.
 
-# Use the Azure Functions image as the final image
-# FROM defradigital/dotnetcore:dotnet8.0
-FROM mcr.microsoft.com/azure-functions/dotnet:4-dotnet8
+WORKDIR "/src/EPR.Payment.Mopup"
+RUN dotnet build "./EPR.Payment.Mopup.csproj" -c Release /p:AzureBuild=true -o /app/build
 
-# Create a non-root user and set permissions
-RUN groupadd -r dotnet && \
-    useradd -r -g dotnet dotnet && \
-    chown -R dotnet /home
+FROM build AS publish
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./EPR.Payment.Mopup.csproj" -c Release /p:AzureBuild=false -o /app/publish
 
-# Switch to the non-root user for the final image
+FROM base AS final
 USER dotnet
-
-# Set environment variables
-ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
-    AzureFunctionsJobHost__Logging__Console__IsEnabled=true
-
-# Copy the published application from the installer-env image
-COPY --from=installer-env --chown=dotnet ["/home/site/wwwroot", "/home/site/wwwroot"]
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "EPR.Payment.Mopup.dll"]
