@@ -13,7 +13,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
         protected readonly HttpClient _httpClient;
         protected IHttpContextAccessor _httpContextAccessor;
 
-        public BaseHttpService(
+        protected BaseHttpService(
             IHttpContextAccessor httpContextAccessor,
             IHttpClientFactory httpClientFactory,
             string baseUrl,

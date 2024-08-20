@@ -1,4 +1,5 @@
 ﻿using AutoFixture.MSTest;
+using Azure.Core;
 using EPR.Payment.Mopup.Common.Data.Interfaces;
 using EPR.Payment.Mopup.Common.Data.Repositories;
 using EPR.Payment.Mopup.Common.Enums;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;
 using System.Data.Entity;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
 {
@@ -28,8 +30,51 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             _cancellationToken = new CancellationToken();
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldCreateInstance(
+             [Frozen] Mock<IAppDbContext> _dataContextMock,
+             [Frozen] Mock<IConfiguration> _configurationMock
+            )
+        {
+            // Act
+            var repo = new PaymentsRepository(
+                _dataContextMock.Object, 
+                _configurationMock.Object);
+
+            // Assert
+            repo.Should().NotBeNull();
+        }
+
+        [TestMethod, AutoMoqData]
+        public void Constructor_WhenDataContextIsNull_ShouldThrowArgumentNullException(
+              [Frozen] Mock<IConfiguration> _configurationMock
+              )
+        {
+            // Act
+            Action act = () => new PaymentsRepository(
+                null!,
+                _configurationMock.Object);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("dataContext");
+        }
+
+
+        [TestMethod, AutoMoqData]
+        public void Constructor_WhenConfigurationMockIsNull_ShouldThrowArgumentNullException(
+                [Frozen] Mock<IAppDbContext> _dataContextMock
+              )
+        {
+            // Act
+            Action act = () => new PaymentsRepository(
+                 _dataContextMock.Object,
+                null!);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("configuration");
+        }
+
+        [TestMethod, AutoMoqData]
         public async Task UpdatePaymentStatusAsync_ValidInput_ShouldComplete(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository,
@@ -57,11 +102,12 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             {
                 _dataContextMock.Verify(c => c.Payment.Update(It.Is<Common.Data.DataModels.Payment>(s => s.UserId == userId && s.OrganisationId == organisationId)), Times.Once());
                 _dataContextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
+                request.UpdatedDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+                request.GovPayStatus.Should().Be(Enum.GetName(typeof(Enums.Status), request.InternalStatusId));
             }
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod, AutoMoqData]
         public async Task UpdatePaymentStatusAsync_NullEntity_ShouldThrowArgumentException(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
@@ -79,13 +125,21 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
                 .Should().ThrowAsync<ArgumentException>();
         }
 
-        [TestMethod]
-        [AutoMoqData]
+        [TestMethod,AutoMoqData]
         public async Task GetPaymentsByStatusAsync_PaymentsExist_ShouldReturnPayments(
             [Frozen] Mock<IAppDbContext> _dataContextMock,
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
             //Arrange
+            DateTime dateTime = DateTime.Now;
+            int TotalMinutesToUpdate = 30;
+            int IgnoringMinutesToUpdate = 15;
+
+            _configurationMock.Setup(x => x["TotalMinutesToUpdate"]).Returns(TotalMinutesToUpdate.ToString());
+            _configurationMock.Setup(x => x["IgnoringMinutesToUpdate"]).Returns(IgnoringMinutesToUpdate.ToString());
+
+            var ignoringFrom = dateTime.AddMinutes(-IgnoringMinutesToUpdate);
+
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object, _configurationMock.Object);
 
@@ -96,6 +150,8 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             using (new AssertionScope())
             {
                 result.Should().NotBeNull();
+                result[0].InternalStatusId.Should().Be(Status.InProgress);
+                result[0].CreatedDate.Should().BeCloseTo(ignoringFrom.AddMinutes(-1), TimeSpan.FromSeconds(1));
             }
         }
     }

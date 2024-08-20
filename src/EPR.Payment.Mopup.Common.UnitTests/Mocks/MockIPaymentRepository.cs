@@ -8,7 +8,7 @@ namespace EPR.Payment.Mopup.Common.UnitTests.Mocks
     public static class MockIPaymentRepository
     {
         public static Mock<DbSet<Data.DataModels.Payment>> GetPaymentMock()
-        {
+        { 
             var paymentMock = new Mock<DbSet<Data.DataModels.Payment>>();
 
 
@@ -25,10 +25,10 @@ namespace EPR.Payment.Mopup.Common.UnitTests.Mocks
                     InternalStatusId = Enums.Status.InProgress,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 1",
-                    CreatedDate = new DateTime(),
+                    CreatedDate = DateTime.Now.AddMinutes(-16),
                     UpdatedByOrganisationId = Guid.NewGuid(),
                     UpdatedByUserId = Guid.NewGuid(),
-                    UpdatedDate = new DateTime()
+                    UpdatedDate = DateTime.Now
                 },
                new Data.DataModels.Payment()
                 {
@@ -41,10 +41,10 @@ namespace EPR.Payment.Mopup.Common.UnitTests.Mocks
                     InternalStatusId = Enums.Status.InProgress,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 2",
-                    CreatedDate = new DateTime(),
+                    CreatedDate = DateTime.Now,
                     UpdatedByOrganisationId = Guid.NewGuid(),
                     UpdatedByUserId = Guid.NewGuid(),
-                    UpdatedDate = new DateTime()
+                    UpdatedDate = DateTime.Now
                }
             }.AsQueryable();
 

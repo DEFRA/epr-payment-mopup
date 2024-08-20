@@ -1,5 +1,6 @@
 ﻿using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Services.Interfaces;
+using FluentAssertions.Execution;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging;
@@ -34,15 +35,18 @@ namespace EPR.Payment.Mopup.UnitTests
             await _paymentsFunction.Run(timerInfo, _cancellationToken);
 
             //Assert
-            _paymentsServiceMock.Verify(x => x.UpdatePaymentsAsync(_cancellationToken), Times.Once);
-            _loggerMock.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Information),
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Mop Up time trigger function executed")),
-                    It.IsAny<Exception>(),
-                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-                    Times.Once);
+            using (new AssertionScope())
+            {
+                _paymentsServiceMock.Verify(x => x.UpdatePaymentsAsync(_cancellationToken), Times.Once);
+                _loggerMock.Verify(
+                    x => x.Log(
+                        It.Is<LogLevel>(l => l == LogLevel.Information),
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Mop Up time trigger function executed")),
+                        It.IsAny<Exception>(),
+                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                        Times.Once);
+            }
         }
 
         [TestMethod]
@@ -58,15 +62,18 @@ namespace EPR.Payment.Mopup.UnitTests
             await _paymentsFunction.Run(timerInfo, _cancellationToken);
 
             //Assert
-            _paymentsServiceMock.Verify(x => x.UpdatePaymentsAsync(_cancellationToken), Times.Once);
-            _loggerMock.Verify(
-                x => x.Log(
-                    It.Is<LogLevel>(l => l == LogLevel.Error),
-                    It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(LogMessages.ErrorOccured)),
-                    It.Is<Exception>(e => e == exception),
-                    It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
-                    Times.Once);
+            using (new AssertionScope())
+            {
+                _paymentsServiceMock.Verify(x => x.UpdatePaymentsAsync(_cancellationToken), Times.Once);
+                _loggerMock.Verify(
+                    x => x.Log(
+                        It.Is<LogLevel>(l => l == LogLevel.Error),
+                        It.IsAny<EventId>(),
+                        It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(LogMessages.ErrorOccured)),
+                        It.Is<Exception>(e => e == exception),
+                        It.IsAny<Func<It.IsAnyType, Exception?, string>>()),
+                        Times.Once);
+            }
         }
 
         private TimerInfo CreateTimerInfo()

@@ -1,4 +1,5 @@
-﻿using EPR.Payment.Mopup.Common.Constants;
+﻿using AutoMapper;
+using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Common.Data.Interfaces;
 using EPR.Payment.Mopup.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Mopup.Common.Enums;
@@ -15,8 +16,8 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             IAppDbContext dataContext,
             IConfiguration configuration)
         {
-            _dataContext = dataContext;
-            _configuration = configuration;
+            _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task UpdatePaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken)

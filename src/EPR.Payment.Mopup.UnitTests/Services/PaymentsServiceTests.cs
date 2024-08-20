@@ -49,6 +49,82 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
         }
 
+        [TestMethod]
+        public void Constructor_WhenAllDependenciesAreNotNull_ShouldCreateInstance()
+        {
+            // Act
+            var service = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+                );
+
+            // Assert
+            service.Should().NotBeNull();
+        }
+
+        [TestMethod]
+        public void Constructor_WhenHttpGovPayServiceIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new PaymentsService(
+                _paymentRepositoryMock.Object,
+                null!,
+                _loggerMock.Object,
+                _mapper
+                );
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("httpGovPayService");
+        }
+
+
+        [TestMethod]
+        public void Constructor_WhenPaymentRepositoryIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new PaymentsService(
+                 null!,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+                );
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("paymentRepository");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenLoggerIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                null!,
+                _mapper
+                );
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("logger");
+        }
+
+        [TestMethod]
+        public void Constructor_WhenMapperIsNull_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                 null!
+                );
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithParameterName("mapper");
+        }
+
         [TestMethod, AutoMoqData]
         public async Task UpdatePaymentsAsync_ShouldUpdatePaymentStatus(
             [Frozen] List<Common.Data.DataModels.Payment> _payments,
@@ -71,7 +147,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
                     .Setup(x => x.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
                     .ReturnsAsync(_paymentStatusResponseDto);
 
-                paymentDto.Status = PaymentStatusMapper.GetPaymentStatus(_paymentStatusResponseDto!.State!.Status!, _paymentStatusResponseDto.State.Code);
+                paymentDto.Status = PaymentStatusMapper.GetPaymentStatus(_paymentStatusResponseDto!.State);
 
                 UpdatePaymentRequestDto _updatePaymentRequestDto = _mapper.Map<UpdatePaymentRequestDto>(paymentDto);
 
@@ -91,15 +167,17 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsNull(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments)
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsNull()
         {
             // Arrange
-            _payments.ForEach(s => s.GovpayPaymentId = null);
+            var payments = new List<Common.Data.DataModels.Payment>
+            {
+                new Common.Data.DataModels.Payment{GovpayPaymentId = null}
+            };
 
             _paymentRepositoryMock
-                .Setup(repo => repo.GetPaymentsByStatusAsync(Common.Enums.Status.InProgress, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(_payments);
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(payments);
 
             _paymentsService = new PaymentsService(
                 _paymentRepositoryMock.Object,
@@ -118,15 +196,17 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsEmptyString(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments)
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsEmptyString()
         {
             // Arrange
-            _payments.ForEach(s => s.GovpayPaymentId = string.Empty);
+            var payments = new List<Common.Data.DataModels.Payment>
+            {
+                new Common.Data.DataModels.Payment{GovpayPaymentId = string.Empty}
+            };
 
             _paymentRepositoryMock
-                .Setup(repo => repo.GetPaymentsByStatusAsync(Common.Enums.Status.InProgress, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(_payments);
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(payments);
 
             _paymentsService = new PaymentsService(
                 _paymentRepositoryMock.Object,
@@ -150,7 +230,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         {
             // Arrange
             _paymentRepositoryMock
-                .Setup(repo => repo.GetPaymentsByStatusAsync(Common.Enums.Status.InProgress, It.IsAny<CancellationToken>()))
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(_payments);
 
             var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
@@ -176,6 +256,248 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             await action.Should().ThrowAsync<ServiceException>()
                         .WithMessage(ExceptionMessages.ErrorRetrievingPaymentStatus);
 
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenPaymentStateIsNull(
+              [Frozen] List<Common.Data.DataModels.Payment> _payments,
+              [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = null;
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act & Assert
+            await _paymentsService.Invoking(async s => await s.UpdatePaymentsAsync(new CancellationToken()))
+                .Should().ThrowAsync<Exception>().WithMessage(ExceptionMessages.ErrorRetrievingPaymentStatus);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenPaymentStatusIsNull(
+             [Frozen] List<Common.Data.DataModels.Payment> _payments,
+             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = null, Finished = true };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act
+            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+
+            // Assert
+            await action.Should().ThrowAsync<ServiceException>()
+                        .WithMessage(ExceptionMessages.ErrorRetrievingPaymentStatus);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenPaymentStatusInvalid(
+             [Frozen] List<Common.Data.DataModels.Payment> _payments,
+             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = "invalid_status", Finished = true };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act & Assert
+            await _paymentsService.Invoking(async s => await s.UpdatePaymentsAsync(new CancellationToken()))
+                .Should().ThrowAsync<Exception>().WithMessage(ExceptionMessages.PaymentStatusNotFound);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenSuccessStatusWithErrorCode(
+             [Frozen] List<Common.Data.DataModels.Payment> _payments,
+             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = "success", Code = "SomeErrorCode", Finished = true };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act & Assert
+            await _paymentsService.Invoking(async s => await s.UpdatePaymentsAsync(new CancellationToken()))
+                .Should().ThrowAsync<Exception>().WithMessage(ExceptionMessages.SuccessStatusWithErrorCode);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenFailedStatusWithEmptyErrorCode(
+             [Frozen] List<Common.Data.DataModels.Payment> _payments,
+             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = "failed", Finished = true, Code = null };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act
+            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+
+            // Assert
+            await action.Should().ThrowAsync<ServiceException>()
+                        .WithMessage(ExceptionMessages.FailedStatusWithoutErrorCode);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenErrorStatusWithEmptyErrorCode(
+             [Frozen] List<Common.Data.DataModels.Payment> _payments,
+             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = "error", Finished = true, Code = null };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act
+            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+
+            // Assert
+            await action.Should().ThrowAsync<ServiceException>()
+                        .WithMessage(ExceptionMessages.ErrorStatusWithoutErrorCode);
+        }
+
+        [TestMethod, AutoMoqData]
+        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenUnknownStatus(
+            [Frozen] List<Common.Data.DataModels.Payment> _payments,
+            [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
+        {
+            // Arrange
+            _paymentRepositoryMock
+                .Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_payments);
+
+            var paymentDtos = _mapper.Map<List<PaymentDto>>(_payments);
+
+            _paymentsService = new PaymentsService(
+                _paymentRepositoryMock.Object,
+                _httpGovPayServiceMock.Object,
+                _loggerMock.Object,
+                _mapper
+            );
+
+            foreach (var paymentDto in paymentDtos)
+            {
+                _paymentStatusResponseDto.State = new State { Status = "unknown_status", Finished = true };
+
+                _httpGovPayServiceMock.Setup(s => s.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                        .ReturnsAsync(_paymentStatusResponseDto);
+
+            }
+
+            // Act
+            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+
+            // Assert
+            await action.Should().ThrowAsync<ServiceException>()
+                        .WithMessage(ExceptionMessages.PaymentStatusNotFound);
         }
     }
 }

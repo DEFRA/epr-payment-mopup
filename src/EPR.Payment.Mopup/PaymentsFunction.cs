@@ -15,8 +15,8 @@ namespace EPR.Payment.Mopup
 
         public PaymentsFunction(IPaymentsService paymentsService, ILogger<PaymentsFunction> logger)
         {
-            _paymentsService = paymentsService;
-            _logger = logger;
+            _paymentsService = paymentsService ?? throw new ArgumentNullException(nameof(paymentsService));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         [FunctionName("MopUpPaymentsFunction")]

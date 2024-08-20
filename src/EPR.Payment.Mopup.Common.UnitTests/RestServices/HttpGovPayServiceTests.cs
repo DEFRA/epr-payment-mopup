@@ -2,7 +2,6 @@
 using EPR.Payment.Mopup.Common.Configuration;
 using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Common.Dtos.Response;
-using EPR.Payment.Mopup.Common.Dtos.Response.Common;
 using EPR.Payment.Mopup.Common.RESTServices;
 using EPR.Payment.Mopup.Common.UnitTests.TestHelpers;
 using FluentAssertions;
@@ -41,12 +40,8 @@ namespace EPR.Payment.Mopup.Common.UnitTests.RestServices
             _httpContextAccessorMock = new Mock<IHttpContextAccessor>();
 
             _expectedResponse = new PaymentStatusResponseDto
-            {
+            { 
                 PaymentId = "12345",
-                Amount = 100,
-                Reference = "123456",
-                Description = "Payment description",
-                ReturnUrl = "https://example.com/return",
                 State = new State { Status = "created", Finished = false }
             };
         }

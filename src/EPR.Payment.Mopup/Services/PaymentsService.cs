@@ -29,10 +29,10 @@ namespace EPR.Payment.Mopup.Services
             ILogger<PaymentsService> logger,
             IMapper mapper)
         {
-            _paymentRepository = paymentRepository;
+            _paymentRepository = paymentRepository ?? throw new ArgumentNullException(nameof(paymentRepository));
             _httpGovPayService = httpGovPayService ?? throw new ArgumentNullException(nameof(httpGovPayService));
-            _logger = logger;
-            _mapper = mapper;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         public async Task UpdatePaymentsAsync(CancellationToken cancellationToken = default)
         {
@@ -46,10 +46,7 @@ namespace EPR.Payment.Mopup.Services
                     throw new ServiceException(ExceptionMessages.PaymentIdNotFound);
                 }
                 var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovpayPaymentId, cancellationToken);
-                var status = PaymentStatusMapper.GetPaymentStatus(
-                            paymentStatusResponse.State?.Status ?? throw new ServiceException(ExceptionMessages.PaymentStatusNotFound),
-                            paymentStatusResponse.State?.Code
-                            );
+                var status = PaymentStatusMapper.GetPaymentStatus(paymentStatusResponse.State);
                 var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
                 var entity = payments.SingleOrDefault(x => x.Id == paymentDto.Id);
                 if(entity != null) 
