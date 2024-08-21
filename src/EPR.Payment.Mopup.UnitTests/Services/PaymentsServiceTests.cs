@@ -151,7 +151,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
                 UpdatePaymentRequestDto _updatePaymentRequestDto = _mapper.Map<UpdatePaymentRequestDto>(paymentDto);
 
-                var entity = _payments.SingleOrDefault(x => x.Id == paymentDto.Id);
+                var entity = _payments.SingleOrDefault(x => x.ExternalPaymentId == paymentDto.ExternalPaymentId);
 
                 _mapper.Map(_updatePaymentRequestDto, entity);
             }
