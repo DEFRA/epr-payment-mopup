@@ -48,7 +48,7 @@ namespace EPR.Payment.Mopup.Services
                 var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovpayPaymentId, cancellationToken);
                 var status = PaymentStatusMapper.GetPaymentStatus(paymentStatusResponse.State);
                 var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
-                var entity = payments.SingleOrDefault(x => x.Id == paymentDto.Id);
+                var entity = payments.SingleOrDefault(x => x.ExternalPaymentId == paymentDto.ExternalPaymentId);
                 if(entity != null) 
                 {
                     _mapper.Map(updateRequest, entity);
