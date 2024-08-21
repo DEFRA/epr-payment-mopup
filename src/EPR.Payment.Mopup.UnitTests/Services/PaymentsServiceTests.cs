@@ -167,7 +167,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsNull()
+        public async Task UpdatePaymentsAsync_ShouldLogError_WhenGovPayPaymentIdIsNull()
         {
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
@@ -187,16 +187,23 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             );
 
             // Act
-            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+            await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
 
             // Assert
-            await action.Should().ThrowAsync<ServiceException>()
-                        .WithMessage(ExceptionMessages.PaymentIdNotFound);
-
+            _loggerMock.Verify(
+                 x => x.Log(
+                     It.Is<LogLevel>(l => l == LogLevel.Error),
+                     It.IsAny<EventId>(),
+                     It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(ExceptionMessages.PaymentIdNotFound)),
+                     It.IsAny<Exception?>(),
+                     It.Is<Func<It.IsAnyType, Exception?, string>>((state, exception) => true)
+                 ),
+                 Times.Once()
+             );
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldThrowException_WhenGovPayPaymentIdIsEmptyString()
+        public async Task UpdatePaymentsAsync_ShouldLogError_WhenGovPayPaymentIdIsEmptyString()
         {
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
@@ -216,12 +223,19 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             );
 
             // Act
-            Func<Task> action = async () => await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
+            await _paymentsService.UpdatePaymentsAsync(new CancellationToken());
 
             // Assert
-            await action.Should().ThrowAsync<ServiceException>()
-                        .WithMessage(ExceptionMessages.PaymentIdNotFound);
-
+            _loggerMock.Verify(
+                 x => x.Log(
+                     It.Is<LogLevel>(l => l == LogLevel.Error),
+                     It.IsAny<EventId>(),
+                     It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(ExceptionMessages.PaymentIdNotFound)),
+                     It.IsAny<Exception?>(),
+                     It.Is<Func<It.IsAnyType, Exception?, string>>((state, exception) => true)
+                 ),
+                 Times.Once()
+             );
         }
 
         [TestMethod, AutoMoqData]
