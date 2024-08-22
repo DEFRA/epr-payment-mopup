@@ -43,16 +43,18 @@ namespace EPR.Payment.Mopup.Services
             {
                 if (string.IsNullOrEmpty(paymentDto.GovpayPaymentId))
                 {
-                    throw new ServiceException(ExceptionMessages.PaymentIdNotFound);
+                    _logger.LogError(ExceptionMessages.PaymentIdNotFound);
+                    continue;
                 }
                 var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovpayPaymentId, cancellationToken);
                 var status = PaymentStatusMapper.GetPaymentStatus(paymentStatusResponse.State);
                 var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
-                var entity = payments.SingleOrDefault(x => x.Id == paymentDto.Id);
-                if(entity != null) 
+                var entity = payments.SingleOrDefault(x => x.ExternalPaymentId == paymentDto.ExternalPaymentId);
+                if (entity != null)
                 {
                     _mapper.Map(updateRequest, entity);
                     await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
+                    _logger.LogInformation(LogMessages.PaymentStatusUpdated.Replace("{externalPaymentId}", paymentDto.ExternalPaymentId.ToString()));
                 }
             }
         }
