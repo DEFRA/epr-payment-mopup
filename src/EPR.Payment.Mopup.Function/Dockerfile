@@ -11,7 +11,7 @@ COPY EPR.Payment.Mopup.Function/. ./EPR.Payment.Mopup.Function/.
 RUN dotnet publish EPR.Payment.Mopup.Function/*.csproj --output /home/site/wwwroot
 
 # Use the Azure Functions image as the final image
-FROM mcr.microsoft.com/azure-functions/dotnet-isolated:4-dotnet-isolated8.0
+FROM mcr.microsoft.com/azure-functions/dotnet:4-dotnet8
 
 # Create a non-root user and set permissions
 RUN groupadd -r dotnet && \
