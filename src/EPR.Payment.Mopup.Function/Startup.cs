@@ -18,7 +18,7 @@ namespace EPR.Payment.Mopup.Function
             var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"local.settings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"local.settings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"local.settings.{environment}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
