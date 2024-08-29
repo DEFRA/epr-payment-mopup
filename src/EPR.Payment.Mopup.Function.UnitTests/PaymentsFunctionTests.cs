@@ -6,7 +6,7 @@ using Microsoft.Azure.WebJobs.Extensions.Timers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace EPR.Payment.Mopup.UnitTests
+namespace EPR.Payment.Mopup.Function.UnitTests
 {
     [TestClass]
     public class PaymentsFunctionTests

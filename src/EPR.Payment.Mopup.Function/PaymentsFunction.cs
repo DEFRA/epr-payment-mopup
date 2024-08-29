@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EPR.Payment.Mopup
+namespace EPR.Payment.Mopup.Function
 {
     public class PaymentsFunction
     {
@@ -20,7 +20,7 @@ namespace EPR.Payment.Mopup
         }
 
         [FunctionName("MopUpPaymentsFunction")]
-        public async Task Run([TimerTrigger("%FUNCTIONS_TIME_TRIGGER%")] TimerInfo myTimer, CancellationToken cancellationToken)
+        public async Task Run([TimerTrigger("%FUNCTIONS_TIME_TRIGGER%", RunOnStartup = true)] TimerInfo myTimer, CancellationToken cancellationToken)
         {
             try
             {
