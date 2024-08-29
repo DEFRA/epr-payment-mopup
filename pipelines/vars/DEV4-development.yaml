@@ -1,6 +1,6 @@
 variables:
   azureSubscription: 'AZD-RWD-DEV4'
-  docker.imageName: 'eprpaymentbackend'
+  docker.imageName: 'eprpaymentmopup'
   acr.azureContainerRegistryName: 'devrwdinfac1401'
   acr.repositoryName: 'eprpaymentbackendrepository'
   serviceName: 'DEVRWDWEBFA4409'
