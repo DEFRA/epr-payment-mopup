@@ -1,4 +1,4 @@
-﻿using EPR.Payment.Mopup;
+﻿using EPR.Payment.Mopup.Function;
 using EPR.Payment.Mopup.Extension;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +8,7 @@ using System.IO;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
-namespace EPR.Payment.Mopup
+namespace EPR.Payment.Mopup.Function
 {
     [ExcludeFromCodeCoverage]
     public class Startup : FunctionsStartup
