@@ -30,7 +30,7 @@ variables:
   - name: solutionFolder
     value: src
   - name: projectFolder
-    value: EPR.Payment.Mopup
+    value: EPR.Payment.Mopup.Function
   - name: testProjectFolder
     value: 'EPR.Payment.Mopup.Common.UnitTests'
   - name: DataFolder

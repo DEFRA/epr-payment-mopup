@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EPR.Payment.Mopup
+namespace EPR.Payment.Mopup.Function
 {
     public class PaymentsFunction
     {
