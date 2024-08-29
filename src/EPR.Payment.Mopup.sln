@@ -11,11 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Common.Da
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5A6A7B15-CD16-48AE-A480-DA3DDB771BB8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Function.UnitTests", "EPR.Payment.Mopup.Function.UnitTests\EPR.Payment.Mopup.Function.UnitTests.csproj", "{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Function.UnitTests", "EPR.Payment.Mopup.Function.UnitTests\EPR.Payment.Mopup.Function.UnitTests.csproj", "{B9CF71D8-7269-46C4-89BC-00C9E77CFFF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Common.UnitTests", "EPR.Payment.Mopup.Common.UnitTests\EPR.Payment.Mopup.Common.UnitTests.csproj", "{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Common.UnitTests", "EPR.Payment.Mopup.Common.UnitTests\EPR.Payment.Mopup.Common.UnitTests.csproj", "{1F20CBF0-2FB9-4017-8264-AF43DF1EB067}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPR.Payment.Mopup.Common.Data.UnitTests", "EPR.Payment.Mopup.Common.Data.UnitTests\EPR.Payment.Mopup.Common.Data.UnitTests.csproj", "{57A94D85-FA59-41AB-884E-69686C3703E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EPR.Payment.Mopup.Common.Data.UnitTests", "EPR.Payment.Mopup.Common.Data.UnitTests\EPR.Payment.Mopup.Common.Data.UnitTests.csproj", "{57A94D85-FA59-41AB-884E-69686C3703E6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
