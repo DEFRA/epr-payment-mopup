@@ -100,7 +100,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             {
                 _dataContextMock.Verify(c => c.Payment.Update(It.Is<Common.Data.DataModels.Payment>(s => s.UserId == userId && s.OrganisationId == organisationId)), Times.Once());
                 _dataContextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
-                request.UpdatedDate.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
+                request.UpdatedDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
                 request.GovPayStatus.Should().Be(Enum.GetName(typeof(Enums.Status), request.InternalStatusId));
             }
         }
@@ -129,7 +129,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             [Greedy] PaymentsRepository _mockPaymentsRepository)
         {
             //Arrange
-            DateTime dateTime = DateTime.Now;
+            DateTime dateTime = DateTime.UtcNow;
             int TotalMinutesToUpdate = 30;
             int IgnoringMinutesToUpdate = 15;
 

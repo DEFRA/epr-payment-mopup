@@ -25,10 +25,10 @@ namespace EPR.Payment.Mopup.Common.UnitTests.Mocks
                     InternalStatusId = Enums.Status.InProgress,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 1",
-                    CreatedDate = DateTime.Now.AddMinutes(-16),
+                    CreatedDate = DateTime.UtcNow.AddMinutes(-16),
                     UpdatedByOrganisationId = Guid.NewGuid(),
                     UpdatedByUserId = Guid.NewGuid(),
-                    UpdatedDate = DateTime.Now
+                    UpdatedDate = DateTime.UtcNow
                 },
                new Data.DataModels.Payment()
                 {
@@ -41,10 +41,10 @@ namespace EPR.Payment.Mopup.Common.UnitTests.Mocks
                     InternalStatusId = Enums.Status.InProgress,
                     Amount = 10.0M,
                     ReasonForPayment = "Test 2",
-                    CreatedDate = DateTime.Now,
+                    CreatedDate = DateTime.UtcNow,
                     UpdatedByOrganisationId = Guid.NewGuid(),
                     UpdatedByUserId = Guid.NewGuid(),
-                    UpdatedDate = DateTime.Now
+                    UpdatedDate = DateTime.UtcNow
                }
             }.AsQueryable();
 
