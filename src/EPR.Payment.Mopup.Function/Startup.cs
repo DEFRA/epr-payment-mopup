@@ -23,8 +23,6 @@ namespace EPR.Payment.Mopup.Function
             {
                 options.EnableAdaptiveSampling = false; // Disable adaptive sampling
             });
-            
-
 
             // You can also configure logging to use Application Insights
             builder.Services.AddLogging(loggingBuilder =>
