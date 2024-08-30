@@ -26,7 +26,7 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
                 throw new ArgumentException(ExceptionMessages.InvalidInputToUpdatePaymentError);
             }
 
-            entity.UpdatedDate = DateTime.Now;
+            entity.UpdatedDate = DateTime.UtcNow;
             entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
             _dataContext.Payment.Update(entity);
             await _dataContext.SaveChangesAsync(cancellationToken);
@@ -34,7 +34,7 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
 
         public async Task<List<DataModels.Payment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
         {
-            DateTime now = DateTime.Now;
+            DateTime now = DateTime.UtcNow;
             DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
             DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
             var entities = await _dataContext.Payment.Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom).ToListAsync();
