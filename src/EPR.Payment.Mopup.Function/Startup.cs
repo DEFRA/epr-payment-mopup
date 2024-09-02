@@ -4,6 +4,7 @@ using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
@@ -28,6 +29,7 @@ namespace EPR.Payment.Mopup.Function
             builder.Services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddApplicationInsights();
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
             });
 
             var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "Development";
