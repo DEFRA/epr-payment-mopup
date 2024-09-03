@@ -23,6 +23,7 @@ namespace EPR.Payment.Mopup.Function
             builder.Services.AddApplicationInsightsTelemetry(options =>
             {
                 options.EnableAdaptiveSampling = false; // Disable adaptive sampling
+                options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
             });
 
             // You can also configure logging to use Application Insights
