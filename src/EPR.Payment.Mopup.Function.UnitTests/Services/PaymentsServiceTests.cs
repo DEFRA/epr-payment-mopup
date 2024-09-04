@@ -169,7 +169,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldLogError_WhenGovPayPaymentIdIsNull()
+        public async Task UpdatePaymentsAsync_WhenGovPayPaymentIdIsNull_ShouldLogError()
         {
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
@@ -205,7 +205,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         }
 
         [TestMethod, AutoMoqData]
-        public async Task UpdatePaymentsAsync_ShouldLogError_WhenGovPayPaymentIdIsEmptyString()
+        public async Task UpdatePaymentsAsync_WhenGovPayPaymentIdIsEmptyString_ShouldLogError()
         {
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
@@ -287,7 +287,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
                     It.IsAny<EventId>(),
                     It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains(ExceptionMessages.PaymentIdNotFound)),
                     null,
-                    It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                    It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
                 Times.Once);
                 _httpGovPayServiceMock.Verify(service => service.GetPaymentStatusAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
             }
@@ -321,7 +321,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
                   It.IsAny<EventId>(),
                   It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("Error occurred while retrieving payment status.")),
                   It.IsAny<Exception>(),
-                  It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                  It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
               Times.Exactly(6));
 
                 _httpGovPayServiceMock.Verify(service => service.GetPaymentStatusAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
@@ -361,7 +361,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
                         It.IsAny<EventId>(),
                         It.Is<It.IsAnyType>((v, t) => v.ToString()!.Contains("externalPaymentId has been updated")),
                         null,
-                        It.IsAny<Func<It.IsAnyType, Exception, string>>()),
+                        It.Is<Func<It.IsAnyType, Exception?, string>>((v, t) => true)),
                     Times.Exactly(3));
             }
         }
