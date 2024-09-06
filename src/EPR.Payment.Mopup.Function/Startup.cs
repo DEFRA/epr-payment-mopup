@@ -18,15 +18,12 @@ namespace EPR.Payment.Mopup.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            // Add Application Insights
-            // Configure Application Insights with custom options and disable adaptive sampling
             builder.Services.AddApplicationInsightsTelemetry(options =>
             {
                 options.EnableAdaptiveSampling = false; // Disable adaptive sampling
                 options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
             });
 
-            // You can also configure logging to use Application Insights
             builder.Services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddApplicationInsights();
