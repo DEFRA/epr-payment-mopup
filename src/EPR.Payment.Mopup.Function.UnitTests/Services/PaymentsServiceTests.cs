@@ -1,13 +1,11 @@
 ﻿using AutoFixture.MSTest;
 using AutoMapper;
 using EPR.Payment.Mopup.Common.Constants;
-using EPR.Payment.Mopup.Common.Data.DataModels;
 using EPR.Payment.Mopup.Common.Data.Interfaces.Repositories;
 using EPR.Payment.Mopup.Common.Data.Profiles;
 using EPR.Payment.Mopup.Common.Dtos.Request;
 using EPR.Payment.Mopup.Common.Dtos.Response;
 using EPR.Payment.Mopup.Common.Enums;
-using EPR.Payment.Mopup.Common.Exceptions;
 using EPR.Payment.Mopup.Common.Mappers;
 using EPR.Payment.Mopup.Common.RESTServices.Interfaces;
 using EPR.Payment.Mopup.Common.UnitTests.TestHelpers;
@@ -15,7 +13,6 @@ using EPR.Payment.Mopup.Services;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
 using Moq;
 
 namespace EPR.Payment.Mopup.UnitTests.Services
