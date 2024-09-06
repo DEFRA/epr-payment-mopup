@@ -47,6 +47,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.InnerException!.ToString());
                 throw new ServiceException(ExceptionMessages.ErrorRetrievingPaymentStatus, ex);
             }
         }
