@@ -61,7 +61,6 @@ namespace EPR.Payment.Mopup.Services
                 }
                 catch(Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
                     _logger.LogError(ex, ex.Message.ToString());
                     continue;
                 }
@@ -82,8 +81,6 @@ namespace EPR.Payment.Mopup.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ExceptionMessages.ErrorRetrievingPaymentStatus);
                 _logger.LogError(ex, ExceptionMessages.ErrorRetrievingPaymentStatus);
                 throw new ServiceException(ExceptionMessages.ErrorRetrievingPaymentStatus, ex);
             }

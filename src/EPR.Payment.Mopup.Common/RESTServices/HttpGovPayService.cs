@@ -26,18 +26,10 @@ namespace EPR.Payment.Mopup.Common.RESTServices
 
         public async Task<PaymentStatusResponseDto?> GetPaymentStatusAsync(string paymentId, CancellationToken cancellationToken = default)
         {
-            try
+            if (_bearerToken != null)
             {
-                if (_bearerToken != null)
-                {
-                    SetBearerToken(_bearerToken); // Set the bearer token
-                }
+                SetBearerToken(_bearerToken); // Set the bearer token
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
 
             var url = UrlConstants.GovPayGetPaymentStatus.Replace("{paymentId}", paymentId);
             try
@@ -46,8 +38,6 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.InnerException == null ? string.Empty : ex.InnerException!.ToString());
                 throw new ServiceException(ExceptionMessages.ErrorRetrievingPaymentStatus, ex);
             }
         }
