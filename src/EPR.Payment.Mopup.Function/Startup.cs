@@ -1,11 +1,13 @@
-﻿using EPR.Payment.Mopup.Function;
-using EPR.Payment.Mopup.Extension;
+﻿using EPR.Payment.Mopup.Extension;
+using EPR.Payment.Mopup.Function;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.ApplicationInsights;
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Microsoft.Extensions.DependencyInjection;
 
 
 [assembly: FunctionsStartup(typeof(Startup))]
@@ -16,8 +18,17 @@ namespace EPR.Payment.Mopup.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            // Add Application Insights telemetry
-            builder.Services.AddApplicationInsightsTelemetry();
+            builder.Services.AddApplicationInsightsTelemetry(options =>
+            {
+                options.EnableAdaptiveSampling = false; // Disable adaptive sampling
+                options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
+            });
+
+            builder.Services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddApplicationInsights();
+                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
+            });
 
             var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
