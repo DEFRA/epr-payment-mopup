@@ -7,7 +7,7 @@ Service to calculate fees and manage payment records for EPR
 ## Getting Started
 
 ### Prerequisites
-- .NET SDK
+- .NET 8 SDK
 - Visual Studio or Visual Studio Code
 - MSSQL
 - Azurite - https://learn.microsoft.com/en-us/azure/storage/common/storage-use-azurite?tabs=visual-studio%2Cblob-storage#install-azurite
