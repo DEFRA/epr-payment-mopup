@@ -61,32 +61,6 @@ local.settings.json
 }
 ```
 
-### Initialise Database
-
-#### Visual Studio
-1. Within the Package Manager Console window:
-    ```
-    Update-Database
-    ```
-
-OR
-
-#### Command Line
-1. Navigate to the project directory:
-    ```bash
-    cd \src\EPR.Payment.Mopup.Function
-    ```
-
-2. Install [dotnet EF CLI](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
-
-    ```
-    dotnet tool install --global dotnet-ef
-    ```
-3. Update Database 
-    ```
-    dotnet ef database update
-    ```
-
 ### Building the Application
 1. Navigate to the project directory:
     ```bash
