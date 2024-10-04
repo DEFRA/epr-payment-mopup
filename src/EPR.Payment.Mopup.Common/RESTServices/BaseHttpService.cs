@@ -143,7 +143,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             await Send(CreateMessage(url, payload, HttpMethod.Delete), cancellationToken);
         }
 
-        private HttpRequestMessage CreateMessage(
+        private static HttpRequestMessage CreateMessage(
             string url,
             object? payload,
             HttpMethod httpMethod)
