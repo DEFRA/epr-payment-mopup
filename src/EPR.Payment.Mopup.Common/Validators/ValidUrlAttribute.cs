@@ -5,6 +5,8 @@ namespace EPR.Payment.Mopup.Common.Validators
 {
     public class ValidUrlAttribute : ValidationAttribute
     {
+        private static readonly TimeSpan RegexTimeout = TimeSpan.FromSeconds(5);
+
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
             if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
@@ -15,7 +17,7 @@ namespace EPR.Payment.Mopup.Common.Validators
             string url = value.ToString()!;
             string pattern = @"^(http|https)://([\w-]+(\.[\w-]+)+)([/#?]?.*)$";
 
-            if (!Regex.IsMatch(url, pattern))
+            if (!Regex.IsMatch(url, pattern, RegexOptions.None, RegexTimeout))
             {
                 return new ValidationResult("The URL is not valid.");
             }
