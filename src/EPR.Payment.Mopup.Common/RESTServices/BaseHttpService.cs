@@ -30,7 +30,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-            if (_baseUrl.EndsWith("/"))
+            if (_baseUrl.EndsWith('/'))
                 _baseUrl = _baseUrl.TrimEnd('/');
 
             _baseUrl = $"{_baseUrl}/{endPointName}";
