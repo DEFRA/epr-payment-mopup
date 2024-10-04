@@ -46,7 +46,21 @@ namespace EPR.Payment.Mopup.Common.RESTServices
         /// </summary>
         protected async Task<T> Get<T>(string url, CancellationToken cancellationToken, bool includeTrailingSlash = true)
         {
-            url = string.IsNullOrEmpty(url) && !includeTrailingSlash ? _baseUrl : includeTrailingSlash ? $"{_baseUrl}/{url}/" : $"{_baseUrl}/{url}";
+            if (string.IsNullOrEmpty(url))
+            {
+                url = _baseUrl;
+            }
+            else
+            {
+                if (includeTrailingSlash)
+                {
+                    url = $"{_baseUrl}/{url}/";
+                }
+                else
+                {
+                    url = $"{_baseUrl}/{url}";
+                }
+            }
 
             return await Send<T>(CreateMessage(url, null, HttpMethod.Get), cancellationToken);
         }
