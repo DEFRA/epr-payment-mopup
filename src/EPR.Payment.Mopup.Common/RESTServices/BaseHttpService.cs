@@ -24,8 +24,8 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             // Initialize _baseUrl in the constructor
             _baseUrl = string.IsNullOrWhiteSpace(baseUrl) ? throw new ArgumentNullException(nameof(baseUrl)) : baseUrl;
 
-            ArgumentNullException.ThrowIfNull(httpClientFactory, nameof(httpClientFactory));
-            ArgumentNullException.ThrowIfNullOrWhiteSpace(endPointName, nameof(endPointName));
+            ArgumentNullException.ThrowIfNull(httpClientFactory);
+            ArgumentNullException.ThrowIfNullOrWhiteSpace(endPointName);
 
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
