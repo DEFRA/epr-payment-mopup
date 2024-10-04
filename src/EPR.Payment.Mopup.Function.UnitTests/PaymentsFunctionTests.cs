@@ -76,7 +76,7 @@ namespace EPR.Payment.Mopup.Function.UnitTests
             }
         }
 
-        private TimerInfo CreateTimerInfo()
+        private static TimerInfo CreateTimerInfo()
         {
             var schedule = new DailySchedule();
             return new TimerInfo(schedule, new ScheduleStatus());
