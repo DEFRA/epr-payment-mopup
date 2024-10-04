@@ -201,11 +201,11 @@ namespace EPR.Payment.Mopup.Common.RESTServices
                 return (T)Convert.ChangeType(value, typeof(T));
         }
 
-        private bool IsValidJson(string stringValue)
+        private static bool IsValidJson(string stringValue)
         {
             try
             {
-                var val = JToken.Parse(stringValue);
+                JToken.Parse(stringValue);
                 return true;
             }
             catch
