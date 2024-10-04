@@ -154,9 +154,9 @@ namespace EPR.Payment.Mopup.Common.RESTServices
 
             if (response.IsSuccessStatusCode)
             {
-                var responseStream = await response.Content.ReadAsStreamAsync();
+                var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
                 using var streamReader = new StreamReader(responseStream);
-                var content = await streamReader.ReadToEndAsync();
+                var content = await streamReader.ReadToEndAsync(cancellationToken);
 
                 if (string.IsNullOrWhiteSpace(content))
                     return default!;
@@ -166,13 +166,13 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             else
             {
                 // get any message from the response
-                var responseStream = await response.Content.ReadAsStreamAsync();
+                var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
                 var content = default(string);
 
                 if (responseStream.Length > 0)
                 {
                     using var streamReader = new StreamReader(responseStream);
-                    content = await streamReader.ReadToEndAsync();
+                    content = await streamReader.ReadToEndAsync(cancellationToken);
                 }
 
                 // set the response status code and throw the exception for the middleware to handle
