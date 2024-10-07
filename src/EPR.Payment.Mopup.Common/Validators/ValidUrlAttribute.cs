@@ -17,12 +17,16 @@ namespace EPR.Payment.Mopup.Common.Validators
             string url = value.ToString()!;
             string pattern = @"^(http|https)://([\w-]+(\.[\w-]+)+)([/#?]?.*)$";
 
-            if (!Regex.IsMatch(url, pattern, RegexOptions.None, RegexTimeout))
+            try
             {
-                return new ValidationResult("The URL is not valid.");
+                return Regex.IsMatch(url, pattern, RegexOptions.None, RegexTimeout)
+                    ? ValidationResult.Success!
+                    : new ValidationResult("The URL is not valid.");
             }
-
-            return ValidationResult.Success!;
+            catch (RegexMatchTimeoutException)
+            {
+                return new ValidationResult("The URL validation timed out.");
+            }
         }
     }
 }
