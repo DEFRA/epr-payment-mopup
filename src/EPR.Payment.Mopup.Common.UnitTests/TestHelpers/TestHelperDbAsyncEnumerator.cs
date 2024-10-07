@@ -16,6 +16,7 @@ namespace EPR.Payment.Mopup.Common.UnitTests.TestHelpers
         public void Dispose()
         {
             _inner.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public Task<bool> MoveNextAsync(CancellationToken cancellationToken)

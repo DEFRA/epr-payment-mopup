@@ -9,37 +9,50 @@ namespace EPR.Payment.Mopup.Common.Mappers
     {
         public static Status GetPaymentStatus(State? state)
         {
-            if (state != null && state.Status != null)
+            if (state?.Status == null)
             {
-                switch (state.Status.ToLower())
-                {
-                    case "success":
-                        if (!string.IsNullOrEmpty(state.Code))
-                        {
-                            throw new ServiceException(ExceptionMessages.SuccessStatusWithErrorCode);
-                        }
-                        return Status.Success;
-                    case "failed":
-                        if (string.IsNullOrEmpty(state.Code))
-                        {
-                            throw new ServiceException(ExceptionMessages.FailedStatusWithoutErrorCode);
-                        }
-                        return state.Code switch
-                        {
-                            "P0030" => Status.UserCancelled,
-                            _ => Status.Failed,
-                        };
-                    case "error":
-                        if (string.IsNullOrEmpty(state.Code))
-                        {
-                            throw new ServiceException(ExceptionMessages.ErrorStatusWithoutErrorCode);
-                        }
-                        return Status.Error;
-                    default:
-                        throw new ServiceException(ExceptionMessages.PaymentStatusNotFound);
-                }
+                throw new ServiceException(ExceptionMessages.PaymentStatusNotFound);
             }
-            throw new ServiceException(ExceptionMessages.PaymentStatusNotFound);
+
+            return state.Status.ToLower() switch
+            {
+                "success" => HandleSuccessStatus(state.Code),
+                "failed" => HandleFailedStatus(state.Code),
+                "error" => HandleErrorStatus(state.Code),
+                _ => throw new ServiceException(ExceptionMessages.PaymentStatusNotFound),
+            };
+        }
+
+        private static Status HandleSuccessStatus(string? code)
+        {
+            if (!string.IsNullOrEmpty(code))
+            {
+                throw new ServiceException(ExceptionMessages.SuccessStatusWithErrorCode);
+            }
+            return Status.Success;
+        }
+
+        private static Status HandleFailedStatus(string? code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new ServiceException(ExceptionMessages.FailedStatusWithoutErrorCode);
+            }
+
+            return code switch
+            {
+                "P0030" => Status.UserCancelled,
+                _ => Status.Failed,
+            };
+        }
+
+        private static Status HandleErrorStatus(string? code)
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new ServiceException(ExceptionMessages.ErrorStatusWithoutErrorCode);
+            }
+            return Status.Error;
         }
     }
 }

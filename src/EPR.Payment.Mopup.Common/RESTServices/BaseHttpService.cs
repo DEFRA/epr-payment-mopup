@@ -24,16 +24,17 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             // Initialize _baseUrl in the constructor
             _baseUrl = string.IsNullOrWhiteSpace(baseUrl) ? throw new ArgumentNullException(nameof(baseUrl)) : baseUrl;
 
-            if (httpClientFactory == null)
-                throw new ArgumentNullException(nameof(httpClientFactory));
+            ArgumentNullException.ThrowIfNull(httpClientFactory);
 
             if (string.IsNullOrWhiteSpace(endPointName))
+            {
                 throw new ArgumentNullException(nameof(endPointName));
+            }
 
             _httpClient = httpClientFactory.CreateClient();
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
 
-            if (_baseUrl.EndsWith("/"))
+            if (_baseUrl.EndsWith('/'))
                 _baseUrl = _baseUrl.TrimEnd('/');
 
             _baseUrl = $"{_baseUrl}/{endPointName}";
@@ -49,7 +50,21 @@ namespace EPR.Payment.Mopup.Common.RESTServices
         /// </summary>
         protected async Task<T> Get<T>(string url, CancellationToken cancellationToken, bool includeTrailingSlash = true)
         {
-            url = string.IsNullOrEmpty(url) && !includeTrailingSlash ? _baseUrl : includeTrailingSlash ? $"{_baseUrl}/{url}/" : $"{_baseUrl}/{url}";
+            if (string.IsNullOrEmpty(url))
+            {
+                url = _baseUrl;
+            }
+            else
+            {
+                if (includeTrailingSlash)
+                {
+                    url = $"{_baseUrl}/{url}/";
+                }
+                else
+                {
+                    url = $"{_baseUrl}/{url}";
+                }
+            }
 
             return await Send<T>(CreateMessage(url, null, HttpMethod.Get), cancellationToken);
         }
@@ -132,7 +147,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             await Send(CreateMessage(url, payload, HttpMethod.Delete), cancellationToken);
         }
 
-        private HttpRequestMessage CreateMessage(
+        private static HttpRequestMessage CreateMessage(
             string url,
             object? payload,
             HttpMethod httpMethod)
@@ -157,9 +172,9 @@ namespace EPR.Payment.Mopup.Common.RESTServices
 
             if (response.IsSuccessStatusCode)
             {
-                var responseStream = await response.Content.ReadAsStreamAsync();
+                var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
                 using var streamReader = new StreamReader(responseStream);
-                var content = await streamReader.ReadToEndAsync();
+                var content = await streamReader.ReadToEndAsync(cancellationToken);
 
                 if (string.IsNullOrWhiteSpace(content))
                     return default!;
@@ -169,13 +184,13 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             else
             {
                 // get any message from the response
-                var responseStream = await response.Content.ReadAsStreamAsync();
+                var responseStream = await response.Content.ReadAsStreamAsync(cancellationToken);
                 var content = default(string);
 
                 if (responseStream.Length > 0)
                 {
                     using var streamReader = new StreamReader(responseStream);
-                    content = await streamReader.ReadToEndAsync();
+                    content = await streamReader.ReadToEndAsync(cancellationToken);
                 }
 
                 // set the response status code and throw the exception for the middleware to handle
@@ -196,7 +211,7 @@ namespace EPR.Payment.Mopup.Common.RESTServices
             }
         }
 
-        private T ReturnValue<T>(string value)
+        private static T ReturnValue<T>(string value)
         {
             if (IsValidJson(value))
                 return JsonConvert.DeserializeObject<T>(value)!;
@@ -204,11 +219,11 @@ namespace EPR.Payment.Mopup.Common.RESTServices
                 return (T)Convert.ChangeType(value, typeof(T));
         }
 
-        private bool IsValidJson(string stringValue)
+        private static bool IsValidJson(string stringValue)
         {
             try
             {
-                var val = JToken.Parse(stringValue);
+                JToken.Parse(stringValue);
                 return true;
             }
             catch
