@@ -16,7 +16,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
     [TestClass]
     public class PaymentsRepositoryTests
     {
-        private Mock<DbSet<Common.Data.DataModels.Payment>> _paymentMock = null!;
+        private Mock<DbSet<Common.Data.DataModels.OnlinePayment>> _paymentMock = null!;
         private Mock<IConfiguration> _configurationMock = null!;
         private CancellationToken _cancellationToken;
 
@@ -84,7 +84,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             _dataContextMock.Setup(i => i.Payment).ReturnsDbSet(_paymentMock.Object);
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object, _configurationMock.Object);
 
-            var request = new Common.Data.DataModels.Payment
+            var request = new Common.Data.DataModels.OnlinePayment
             {
                 ExternalPaymentId = newId,
                 UserId = userId,
@@ -98,7 +98,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             //Assert
             using (new AssertionScope())
             {
-                _dataContextMock.Verify(c => c.Payment.Update(It.Is<Common.Data.DataModels.Payment>(s => s.UserId == userId && s.OrganisationId == organisationId)), Times.Once());
+                _dataContextMock.Verify(c => c.Payment.Update(It.Is<Common.Data.DataModels.OnlinePayment>(s => s.UserId == userId && s.OrganisationId == organisationId)), Times.Once());
                 _dataContextMock.Verify(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Exactly(1));
                 request.UpdatedDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
                 request.GovPayStatus.Should().Be(Enum.GetName(typeof(Enums.Status), request.InternalStatusId));
@@ -115,7 +115,7 @@ namespace EPR.Payment.Mopup.Common.Data.UnitTests.Repositories
             _mockPaymentsRepository = new PaymentsRepository(_dataContextMock.Object, _configurationMock.Object);
 
 
-            Common.Data.DataModels.Payment? request = null;
+            Common.Data.DataModels.OnlinePayment? request = null;
 
 
             //Act & Assert

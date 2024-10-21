@@ -6,7 +6,7 @@ namespace EPR.Payment.Mopup.Common.Data.Interfaces
     public interface IAppDbContext
     {
         DbSet<PaymentStatus> PaymentStatus { get; }
-        DbSet<DataModels.Payment> Payment { get; }
+        DbSet<DataModels.OnlinePayment> Payment { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
