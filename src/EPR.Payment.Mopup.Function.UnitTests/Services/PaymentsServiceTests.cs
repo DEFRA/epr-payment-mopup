@@ -126,7 +126,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
         [TestMethod, AutoMoqData]
         public async Task UpdatePaymentsAsync_ShouldUpdatePaymentStatus(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments,
+            [Frozen] List<Common.Data.DataModels.OnlinePayment> _payments,
             [Frozen] PaymentStatusResponseDto _paymentStatusResponseDto)
         {
             // Arrange
@@ -161,7 +161,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             // Assert
             using (new AssertionScope())
             {
-                _paymentRepositoryMock.Verify(x => x.UpdatePaymentStatusAsync(It.IsAny<Common.Data.DataModels.Payment>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
+                _paymentRepositoryMock.Verify(x => x.UpdatePaymentStatusAsync(It.IsAny<Common.Data.DataModels.OnlinePayment>(), It.IsAny<CancellationToken>()), Times.AtLeastOnce);
             }
         }
 
@@ -169,9 +169,9 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         public async Task UpdatePaymentsAsync_WhenGovPayPaymentIdIsNull_ShouldLogError()
         {
             // Arrange
-            var payments = new List<Common.Data.DataModels.Payment>
+            var payments = new List<Common.Data.DataModels.OnlinePayment>
             {
-                new Common.Data.DataModels.Payment{GovpayPaymentId = null}
+                new Common.Data.DataModels.OnlinePayment{GovpayPaymentId = null}
             };
 
             _paymentRepositoryMock
@@ -205,9 +205,9 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         public async Task UpdatePaymentsAsync_WhenGovPayPaymentIdIsEmptyString_ShouldLogError()
         {
             // Arrange
-            var payments = new List<Common.Data.DataModels.Payment>
+            var payments = new List<Common.Data.DataModels.OnlinePayment>
             {
-                new Common.Data.DataModels.Payment{GovpayPaymentId = string.Empty}
+                new Common.Data.DataModels.OnlinePayment{GovpayPaymentId = string.Empty}
             };
 
             _paymentRepositoryMock
@@ -243,7 +243,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
         {
             // Arrange
             _paymentRepositoryMock.Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
-                                  .ReturnsAsync(new List<Common.Data.DataModels.Payment>());
+                                  .ReturnsAsync(new List<Common.Data.DataModels.OnlinePayment>());
 
             // Act
             await _paymentsService.UpdatePaymentsAsync();
@@ -259,7 +259,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
         [TestMethod, AutoMoqData]
         public async Task UpdatePaymentsAsync_WhenGovpayPaymentIdIsEmpty_ShouldLogErrorAndContinue(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments,
+            [Frozen] List<Common.Data.DataModels.OnlinePayment> _payments,
             [Frozen] List<PaymentDto> _paymentDtos,
             [Frozen] Mock<IMapper> _mapperMock)
         {
@@ -269,7 +269,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
             _paymentRepositoryMock.Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(_payments);
-            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.Payment>>()))
+            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.OnlinePayment>>()))
                        .Returns(_paymentDtos);
 
             // Act
@@ -292,7 +292,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
         [TestMethod, AutoMoqData]
         public async Task UpdatePaymentsAsync_WhenGetPaymentStatusResponseAsyncThrowsException_ShouldLogErrorAndContinue(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments,
+            [Frozen] List<Common.Data.DataModels.OnlinePayment> _payments,
             [Frozen] List<PaymentDto> _paymentDtos,
             [Frozen] Mock<IMapper> _mapperMock)
         {
@@ -300,7 +300,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
             _paymentRepositoryMock.Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(_payments);
-            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.Payment>>()))
+            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.OnlinePayment>>()))
                        .Returns(_paymentDtos);
 
             _httpGovPayServiceMock.Setup(service => service.GetPaymentStatusAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -328,7 +328,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
 
         [TestMethod, AutoMoqData]
         public async Task UpdatePaymentsAsync_WhenPaymentIsProcessedSuccessfully_ShouldUpdatePaymentStatusAndLogInformation(
-            [Frozen] List<Common.Data.DataModels.Payment> _payments,
+            [Frozen] List<Common.Data.DataModels.OnlinePayment> _payments,
             [Frozen] List<PaymentDto> _paymentDtos,
             [Frozen] Mock<IMapper> _mapperMock,
             [Frozen] PaymentStatusResponseDto _paymentStatusResponse)
@@ -338,7 +338,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             _paymentStatusResponse.State!.Code = string.Empty;
             _paymentRepositoryMock.Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(_payments);
-            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.Payment>>()))
+            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.OnlinePayment>>()))
                        .Returns(_paymentDtos);
 
             _httpGovPayServiceMock.Setup(service => service.GetPaymentStatusAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
@@ -350,7 +350,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             // Assert
             using(new AssertionScope())
             {
-                _paymentRepositoryMock.Verify(repo => repo.UpdatePaymentStatusAsync(It.IsAny<Common.Data.DataModels.Payment>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
+                _paymentRepositoryMock.Verify(repo => repo.UpdatePaymentStatusAsync(It.IsAny<Common.Data.DataModels.OnlinePayment>(), It.IsAny<CancellationToken>()), Times.Exactly(3));
 
                 _loggerMock.Verify(
                     logger => logger.Log(

@@ -16,11 +16,22 @@ namespace EPR.Payment.Mopup.Common.Data
         {
         }
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
-        public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
+        public DbSet<DataModels.OnlinePayment> Payment => Set<DataModels.OnlinePayment>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer();
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<DataModels.Payment>()
+               .ToTable("Payment");
+
+            modelBuilder.Entity<DataModels.OnlinePayment>()
+                    .ToTable("OnlinePayment");
         }
     }
 }

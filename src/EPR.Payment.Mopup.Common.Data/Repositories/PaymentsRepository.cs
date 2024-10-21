@@ -19,7 +19,7 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task UpdatePaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken)
+        public async Task UpdatePaymentStatusAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
@@ -32,14 +32,12 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<DataModels.Payment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
+        public async Task<List<DataModels.OnlinePayment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
         {
             DateTime now = DateTime.UtcNow;
             DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
             DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
-            var entities = await _dataContext.Payment
-                .Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom)
-                .ToListAsync(cancellationToken);
+            var entities = await _dataContext.Payment.Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom).ToListAsync();
             return entities;
         }
     }
