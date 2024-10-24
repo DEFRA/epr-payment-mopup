@@ -37,7 +37,12 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             DateTime now = DateTime.UtcNow;
             DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
             DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
-            var entities = await _dataContext.Payment.Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom).ToListAsync(cancellationToken);
+            var entities = await _dataContext.Payment
+                .Where(a => 
+                    a.InternalStatusId == Status.InProgress && 
+                    a.CreatedDate >= updateFrom && 
+                    a.CreatedDate <= ignoringFrom)
+                .ToListAsync(cancellationToken);
             return entities;
         }
     }
