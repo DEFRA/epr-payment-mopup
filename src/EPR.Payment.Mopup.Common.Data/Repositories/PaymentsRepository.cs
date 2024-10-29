@@ -27,7 +27,7 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             }
 
             entity.UpdatedDate = DateTime.UtcNow;
-            entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
+            entity.OnlinePayment.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
             _dataContext.Payment.Update(entity);
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
@@ -38,7 +38,12 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
             DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
             var entities = await _dataContext.Payment
-                .Where(a => a.InternalStatusId == Status.InProgress && a.CreatedDate >= updateFrom && a.CreatedDate <= ignoringFrom)
+                .Include(p => p.OnlinePayment)
+                .Where(a => 
+                    a.InternalStatusId == Status.InProgress && 
+                    a.CreatedDate >= updateFrom && 
+                    a.CreatedDate <= ignoringFrom &&
+                    !string.IsNullOrEmpty(a.OnlinePayment.GovPayPaymentId))
                 .ToListAsync(cancellationToken);
             return entities;
         }

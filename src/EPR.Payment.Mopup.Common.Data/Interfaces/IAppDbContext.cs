@@ -7,6 +7,7 @@ namespace EPR.Payment.Mopup.Common.Data.Interfaces
     {
         DbSet<PaymentStatus> PaymentStatus { get; }
         DbSet<DataModels.Payment> Payment { get; }
+        DbSet<DataModels.OnlinePayment> OnlinePayment { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
