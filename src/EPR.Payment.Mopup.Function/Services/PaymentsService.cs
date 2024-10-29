@@ -89,7 +89,6 @@ namespace EPR.Payment.Mopup.Services
         {
             var updatePayment = _mapper.Map<UpdatePaymentRequestDto>(paymentDto);
             updatePayment.Status = status;
-            updatePayment.GovPayStatus = paymentStatusResponse!.State!.Status;
             updatePayment.ErrorCode = paymentStatusResponse!.State!.Code;
             updatePayment.ErrorMessage = paymentStatusResponse!.State!.Message;
 
