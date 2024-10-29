@@ -19,7 +19,7 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public async Task UpdatePaymentStatusAsync(DataModels.OnlinePayment? entity, CancellationToken cancellationToken)
+        public async Task UpdatePaymentStatusAsync(DataModels.Payment? entity, CancellationToken cancellationToken)
         {
             if (entity == null)
             {
@@ -27,21 +27,23 @@ namespace EPR.Payment.Mopup.Common.Data.Repositories
             }
 
             entity.UpdatedDate = DateTime.UtcNow;
-            entity.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
+            entity.OnlinePayment.GovPayStatus = Enum.GetName(typeof(Enums.Status), entity.InternalStatusId);
             _dataContext.Payment.Update(entity);
             await _dataContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<DataModels.OnlinePayment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
+        public async Task<List<DataModels.Payment>> GetPaymentsByStatusAsync(Status status, CancellationToken cancellationToken)
         {
             DateTime now = DateTime.UtcNow;
             DateTime updateFrom = now.AddMinutes(-Convert.ToInt32(_configuration["TotalMinutesToUpdate"]));
             DateTime ignoringFrom = now.AddMinutes(-Convert.ToInt32(_configuration["IgnoringMinutesToUpdate"]));
             var entities = await _dataContext.Payment
+                .Include(p => p.OnlinePayment)
                 .Where(a => 
                     a.InternalStatusId == Status.InProgress && 
                     a.CreatedDate >= updateFrom && 
-                    a.CreatedDate <= ignoringFrom)
+                    a.CreatedDate <= ignoringFrom &&
+                    !string.IsNullOrEmpty(a.OnlinePayment.GovPayPaymentId))
                 .ToListAsync(cancellationToken);
             return entities;
         }
