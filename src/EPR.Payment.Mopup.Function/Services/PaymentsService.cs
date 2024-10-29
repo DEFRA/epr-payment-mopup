@@ -55,6 +55,7 @@ namespace EPR.Payment.Mopup.Services
                     if (entity != null)
                     {
                         _mapper.Map(updateRequest, entity);
+                        _mapper.Map(updateRequest, entity.OnlinePayment);
                         await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
                         _logger.LogInformation(LogMessages.PaymentStatusUpdated.Replace("{externalPaymentId}", paymentDto.ExternalPaymentId.ToString()));
                     }
