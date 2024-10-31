@@ -17,6 +17,7 @@ namespace EPR.Payment.Mopup.Common.Data
         }
         public DbSet<PaymentStatus> PaymentStatus => Set<PaymentStatus>();
         public DbSet<DataModels.Payment> Payment => Set<DataModels.Payment>();
+        public DbSet<DataModels.OnlinePayment> OnlinePayment => Set<DataModels.OnlinePayment>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

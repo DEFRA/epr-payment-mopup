@@ -41,20 +41,21 @@ namespace EPR.Payment.Mopup.Services
 
             foreach (var paymentDto in paymentDtos)
             {
-                if (string.IsNullOrEmpty(paymentDto.GovpayPaymentId))
+                if (string.IsNullOrEmpty(paymentDto.GovPayPaymentId))
                 {
                     _logger.LogError(ExceptionMessages.PaymentIdNotFound);
                     continue;
                 }
                 try
                 {
-                    var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovpayPaymentId, cancellationToken);
+                    var paymentStatusResponse = await GetPaymentStatusResponseAsync(paymentDto.GovPayPaymentId, cancellationToken);
                     var status = PaymentStatusMapper.GetPaymentStatus(paymentStatusResponse.State);
                     var updateRequest = CreateUpdatePaymentRequest(paymentDto, paymentStatusResponse, status);
                     var entity = payments.SingleOrDefault(x => x.ExternalPaymentId == paymentDto.ExternalPaymentId);
                     if (entity != null)
                     {
                         _mapper.Map(updateRequest, entity);
+                        _mapper.Map(updateRequest, entity.OnlinePayment);
                         await _paymentRepository.UpdatePaymentStatusAsync(entity, cancellationToken);
                         _logger.LogInformation(LogMessages.PaymentStatusUpdated.Replace("{externalPaymentId}", paymentDto.ExternalPaymentId.ToString()));
                     }

@@ -143,7 +143,7 @@ namespace EPR.Payment.Mopup.UnitTests.Services
                 _paymentStatusResponseDto!.State!.Message = "Payment Successful";
 
                 _httpGovPayServiceMock
-                    .Setup(x => x.GetPaymentStatusAsync(paymentDto.GovpayPaymentId!, It.IsAny<CancellationToken>()))
+                    .Setup(x => x.GetPaymentStatusAsync(paymentDto.GovPayPaymentId!, It.IsAny<CancellationToken>()))
                     .ReturnsAsync(_paymentStatusResponseDto);
 
                 paymentDto.Status = PaymentStatusMapper.GetPaymentStatus(_paymentStatusResponseDto!.State);
@@ -171,7 +171,12 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
             {
-                new Common.Data.DataModels.Payment{GovpayPaymentId = null}
+                new Common.Data.DataModels.Payment{
+                    OnlinePayment = new Common.Data.DataModels.OnlinePayment()
+                    {
+                        GovPayPaymentId = null
+                    } 
+                }
             };
 
             _paymentRepositoryMock
@@ -207,7 +212,12 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             // Arrange
             var payments = new List<Common.Data.DataModels.Payment>
             {
-                new Common.Data.DataModels.Payment{GovpayPaymentId = string.Empty}
+                new Common.Data.DataModels.Payment{
+                    OnlinePayment = new Common.Data.DataModels.OnlinePayment()
+                    {
+                        GovPayPaymentId = string.Empty
+                    }
+                }
             };
 
             _paymentRepositoryMock
@@ -264,12 +274,12 @@ namespace EPR.Payment.Mopup.UnitTests.Services
             [Frozen] Mock<IMapper> _mapperMock)
         {
             // Arrange
-            _paymentDtos[0].GovpayPaymentId = null;
-            _payments[0].GovpayPaymentId = null;
+            _paymentDtos[0].GovPayPaymentId = null;
+            _payments[0].OnlinePayment.GovPayPaymentId = null;
 
             _paymentRepositoryMock.Setup(repo => repo.GetPaymentsByStatusAsync(Status.InProgress, It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(_payments);
-            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.Payment>>()))
+            _mapperMock.Setup(mapper => mapper.Map<List<PaymentDto>>(It.IsAny<IEnumerable<Common.Data.DataModels.OnlinePayment>>()))
                        .Returns(_paymentDtos);
 
             // Act

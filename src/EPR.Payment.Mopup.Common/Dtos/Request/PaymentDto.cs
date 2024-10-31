@@ -3,7 +3,7 @@
     public class PaymentDto
     {
         public Guid ExternalPaymentId { get; set; }
-        public string? GovpayPaymentId { get; set; }
+        public string? GovPayPaymentId { get; set; }
         public Enums.Status Status { get; set; }
     }
 }
