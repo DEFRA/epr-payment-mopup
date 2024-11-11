@@ -1,6 +1,6 @@
 variables:
   azureSubscription: 'AZD-RWD-TST1'
-  docker.imageName: 'eprpaymentbackend'
+  docker.imageName: 'eprpaymentmopup'
   acr.azureContainerRegistryName: 'tstrwdinfac1401'
-  acr.repositoryName: 'eprpaymentbackendrepository'
-  serviceName: 'tstrwdwebwab425'
+  acr.repositoryName: 'eprpaymentmopuprepository'
+  serviceName: 'tstrwdwebwa1425'
