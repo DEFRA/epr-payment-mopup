@@ -18,17 +18,7 @@ namespace EPR.Payment.Mopup.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddApplicationInsightsTelemetry(options =>
-            {
-                options.EnableAdaptiveSampling = false; // Disable adaptive sampling
-                options.ConnectionString = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING");
-            });
-
-            builder.Services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddApplicationInsights();
-                loggingBuilder.AddFilter<ApplicationInsightsLoggerProvider>("", LogLevel.Information);
-            });
+            builder.Services.AddApplicationInsightsTelemetry();
 
             var environment = Environment.GetEnvironmentVariable("AZURE_FUNCTIONS_ENVIRONMENT") ?? "Development";
             var config = new ConfigurationBuilder()
