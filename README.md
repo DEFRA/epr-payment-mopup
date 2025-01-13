@@ -83,5 +83,6 @@ local.settings.json
     dotnet run
     ```
 
-3. The Function will run based off the FUNCTIONS_TIME_TRIGGER timer in the configuration, this can be shortened to 30 seconds by replacing it with "*/30 * * * * *" 
+3. The Function will run based off the FUNCTIONS_TIME_TRIGGER timer in the configuration, this can be shortened to 30 seconds by replacing it with "*/30 * * * * *"
+
 
