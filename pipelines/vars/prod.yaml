@@ -4,3 +4,7 @@ variables:
   acr.azureContainerRegistryName: 'prdrwdinfac1401'
   acr.repositoryName: 'eprpaymentmopuprepository'
   serviceName: 'PRDRWDWEBFA1409'
+  kvName: PRDRWDINFKV1401
+  sqlDBserver: 'prdrwddbssq1401.database.windows.net'
+  sqlDB: 'prd1_feespayment'
+  acr.Subscription: 'AZR-RWD-PRD1'
