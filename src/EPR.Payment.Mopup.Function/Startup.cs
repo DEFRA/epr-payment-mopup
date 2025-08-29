@@ -45,7 +45,7 @@ namespace EPR.Payment.Mopup.Function
 
         public override void ConfigureAppConfiguration(IFunctionsConfigurationBuilder builder)
         {
-            var builtConfig = builder.ConfigurationBuilder.Build();
+            builder.ConfigurationBuilder.Build();
 
             builder.ConfigurationBuilder
                .SetBasePath(Environment.CurrentDirectory)
