@@ -1,10 +1,18 @@
 variables:
-  azureSubscription: 'AZR-RWD-PRD1'
-  docker.imageName: 'eprpaymentmopup'
-  acr.azureContainerRegistryName: 'prdrwdinfac1401'
-  acr.repositoryName: 'eprpaymentmopuprepository'
-  serviceName: 'PRDRWDWEBFA1409'
-  kvName: PRDRWDINFKV1401
-  sqlDBserver: 'prdrwddbssq1401.database.windows.net'
-  sqlDB: 'prd1_feespayment'
-  acr.Subscription: 'AZR-RWD-PRD1'
+- group: ServiceConnection-PRD1
+- name: docker.imageName
+  value: 'eprpaymentmopup'
+- name: acr.azureContainerRegistryName
+  value: 'prdrwdinfac1401'
+- name: acr.repositoryName
+  value: 'eprpaymentmopuprepository'
+- name: serviceName
+  value: 'PRDRWDWEBFA1409'
+- name: kvName
+  value: PRDRWDINFKV1401
+- name: sqlDBserver
+  value: 'prdrwddbssq1401.database.windows.net'
+- name: sqlDB
+  value: 'prd1_feespayment'
+- name: acr.Subscription
+  value: 'AZR-RWD-PRD1'
