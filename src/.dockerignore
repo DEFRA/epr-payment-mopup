@@ -1,0 +1,5 @@
+**/bin/
+**/obj/
+**/TestResults/
+**/unit-tests-coverage/
+**/local.settings*.json
