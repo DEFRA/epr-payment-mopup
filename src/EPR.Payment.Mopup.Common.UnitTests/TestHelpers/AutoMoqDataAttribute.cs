@@ -1,11 +1,10 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
-using AutoFixture.MSTest;
 namespace EPR.Payment.Mopup.Common.UnitTests.TestHelpers
 {
     [AttributeUsage(AttributeTargets.Method)]
-    public class AutoMoqDataAttribute : AutoDataAttribute
+    public class AutoMoqDataAttribute : MSTestAutoDataAttribute
     {
         public AutoMoqDataAttribute() : base(() =>
         {
