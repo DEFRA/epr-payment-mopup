@@ -1,4 +1,4 @@
-﻿using AutoFixture.MSTest;
+﻿using AutoFixture.Xunit2;
 using EPR.Payment.Mopup.Common.Data.Interfaces;
 using EPR.Payment.Mopup.Common.Data.Repositories;
 using EPR.Payment.Mopup.Common.Enums;
