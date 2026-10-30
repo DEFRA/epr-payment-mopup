@@ -105,13 +105,6 @@ The function uses the isolated worker timer extension and worker Application Ins
 Worker logging is configured separately from host logging in `host.json`; the SDK's default
 Warning-only Application Insights filter is removed to preserve application Information logs.
 
-### Local container regression test
-
-With Docker Desktop running, execute `python3 tests/local-container/run.py` from the repository root.
-This builds the real function image and verifies startup, two timer cycles and 15 payment cases against
-disposable SQL Server, Azurite and a local GOV.UK Pay stub on an internal network. No live credentials,
-deployments or pipelines are used. See [the test harness](tests/local-container/README.md).
-
 ### Deployment and regression checks
 
 CI and deployment use `DEFRA-COMMON-UBUNTU-SSV3`, matching

@@ -1,9 +1,0 @@
-{
-  "Services": {
-    "GovPayService": {
-      "Url": "http://govpay:8080",
-      "EndPointName": "must-be-overridden",
-      "BearerToken": "local-test-token"
-    }
-  }
-}

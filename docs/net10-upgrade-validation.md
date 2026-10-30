@@ -163,8 +163,7 @@ create a temporary runtime mismatch, so coordinate both changes in the authorize
   image builds reproducible and avoiding copying development settings into build layers.
 - No payment selection, reconciliation-window or status-mapping code changed.
 
-The repeatable harness is `tests/local-container/run.py`; its ignored `artifacts/results.json`
-and per-service logs contain the local execution evidence. See the harness README for commands.
+This was a one-off local run; the harness used for it is not part of the repository.
 
 ## Dependency security and licensing
 
