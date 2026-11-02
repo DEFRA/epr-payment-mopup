@@ -1,6 +1,6 @@
 using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Services.Interfaces;
-using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
@@ -19,7 +19,7 @@ namespace EPR.Payment.Mopup.Function
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        [FunctionName("MopUpPaymentsFunction")]
+        [Function("MopUpPaymentsFunction")]
         public async Task Run([TimerTrigger("%FUNCTIONS_TIME_TRIGGER%")] TimerInfo myTimer, CancellationToken cancellationToken)
         {
             try

@@ -24,6 +24,8 @@ namespace EPR.Payment.Mopup.Extension
     {
         public static IServiceCollection AddDependencies(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpClient();
+            services.AddHttpContextAccessor();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IPaymentsRepository, PaymentsRepository>();
             services.Configure<ServicesConfiguration>(configuration.GetSection(ServicesConfiguration.SectionName));

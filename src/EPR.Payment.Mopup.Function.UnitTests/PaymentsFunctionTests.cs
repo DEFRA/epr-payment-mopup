@@ -1,8 +1,7 @@
 ﻿using EPR.Payment.Mopup.Common.Constants;
 using EPR.Payment.Mopup.Services.Interfaces;
 using FluentAssertions.Execution;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Timers;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -78,8 +77,7 @@ namespace EPR.Payment.Mopup.Function.UnitTests
 
         private static TimerInfo CreateTimerInfo()
         {
-            var schedule = new DailySchedule();
-            return new TimerInfo(schedule, new ScheduleStatus());
+            return new TimerInfo { ScheduleStatus = new ScheduleStatus() };
         }
     }
 }
